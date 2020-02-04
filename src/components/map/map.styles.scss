@@ -1,0 +1,139 @@
+.map {
+  width: 600px;
+  height: 600px;
+  border: 4px solid #000;
+  margin: 0 auto;
+  background-color: bisque;
+}
+
+.tile {
+  display: inline-flex;
+}
+
+.zero {
+  background-color: bisque;
+  width: 40px;
+  height: 40px;
+}
+
+.u {
+  background-color: bisque;
+  border-top: 2px solid black;
+  width: 40px;
+  height: 38px;
+}
+
+.ur {
+  background-color: bisque;
+  border-top: 2px solid black;
+  border-right: 2px solid black;
+  width: 38px;
+  height: 38px;
+}
+
+.ud {
+  background-color: bisque;
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
+  width: 40px;
+  height: 36px;
+}
+
+.ul {
+  background-color: bisque;
+  border-top: 2px solid black;
+  border-left: 2px solid black;
+  width: 38px;
+  height: 38px;
+}
+
+.urd {
+  background-color: bisque;
+  border-top: 2px solid black;
+  border-right: 2px solid black;
+  border-bottom: 2px solid black;
+  width: 38px;
+  height: 36px;
+}
+
+.url {
+  background-color: bisque;
+  border-top: 2px solid black;
+  border-right: 2px solid black;
+  border-left: 2px solid black;
+  width: 36px;
+  height: 38px;
+}
+
+.udl {
+  background-color: bisque;
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
+  border-left: 2px solid black;
+  width: 38px;
+  height: 36px;
+}
+
+.urdl {
+  background-color: bisque;
+  border-top: 2px solid black;
+  border-right: 2px solid black;
+  border-bottom: 2px solid black;
+  border-left: 2px solid black;
+  width: 36px;
+  height: 36px;
+}
+
+.r {
+  background-color: bisque;
+  border-right: 2px solid black;
+  width: 38px;
+  height: 40px;
+}
+
+.rd {
+  background-color: bisque;
+  border-right: 2px solid black;
+  border-bottom: 2px solid black;
+  width: 38px;
+  height: 38px;
+}
+
+.rl {
+  background-color: bisque;
+  border-right: 2px solid black;
+  border-left: 2px solid black;
+  width: 36px;
+  height: 40px;
+}
+
+.rdl {
+  background-color: bisque;
+  border-right: 2px solid black;
+  border-bottom: 2px solid black;
+  border-left: 2px solid black;
+  width: 36px;
+  height: 38px;
+}
+
+.d {
+  background-color: bisque;
+  border-bottom: 2px solid black;
+  width: 40px;
+  height: 38px;
+}
+
+.dl {
+  background-color: bisque;
+  border-bottom: 2px solid black;
+  border-left: 2px solid black;
+  width: 38px;
+  height: 38px;
+}
+
+.l {
+  background-color: bisque;
+  border-left: 2px solid black;
+  width: 38px;
+  height: 40px;
+}

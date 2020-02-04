@@ -1,0 +1,51 @@
+.header {
+    height: 50px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 25px;
+    padding: 20px 100px;
+  
+    .logo-container {
+      height: 100%;
+      width: 50px;
+      margin-left: 100px;
+    }
+
+    .spacer {
+        width: 20%;
+    }      
+
+    .profile {
+        height: 100%;
+        width: 130px;
+        justify-content: left;
+        align-items: center;
+        margin: auto;
+
+        .name {
+            width: 60%;
+            height: 100%;
+            float: left;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 7%;
+        }
+    
+        .pic {
+            margin-left: 45%;
+            height: 30px;
+            width: 30px;
+            display: flex;
+            margin-top: 10px;
+        }
+    }
+
+    .profile:hover {
+    background-color: rgba(217, 217, 217, 0.3);
+    cursor: pointer;
+    }
+      
+}
+  

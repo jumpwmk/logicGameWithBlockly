@@ -1,6 +1,5 @@
 #blocklyDiv {
-  height: 50%;
-  width: 100%;
-  position: absolute;
+  height: 600px;
+  width: 800px;
   bottom: 0;
 }
