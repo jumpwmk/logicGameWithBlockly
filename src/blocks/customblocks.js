@@ -30,48 +30,6 @@ import * as Blockly from 'blockly/core';
 import '../fields/BlocklyReactField';
 import '../fields/DateField';
 
-var testReactField = {
-  type: 'test_react_field',
-  message0: 'custom field %1',
-  args0: [
-    {
-      type: 'field_react_component',
-      name: 'FIELD',
-      text: 'Click me'
-    }
-  ],
-  previousStatement: null,
-  nextStatement: null
-};
-
-Blockly.Blocks['test_react_field'] = {
-  init: function() {
-    this.jsonInit(testReactField);
-    this.setStyle('loop_blocks');
-  }
-};
-
-var reactDateField = {
-  type: 'test_react_date_field',
-  message0: 'date field %1',
-  args0: [
-    {
-      type: 'field_react_date',
-      name: 'DATE',
-      date: '01/01/2020'
-    }
-  ],
-  previousStatement: null,
-  nextStatement: null
-};
-
-Blockly.Blocks['test_react_date_field'] = {
-  init: function() {
-    this.jsonInit(reactDateField);
-    this.setStyle('loop_blocks');
-  }
-};
-
 // go ahead
 
 Blockly.Blocks['go_ahead'] = {
@@ -85,12 +43,6 @@ Blockly.Blocks['go_ahead'] = {
       'https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#c477mo'
     );
   }
-};
-
-Blockly.JavaScript['go_ahead'] = function(block) {
-  // TODO: Assemble JavaScript into code letiable.
-  let code = "moveForward('block_id_" + block.id + "');\n";
-  return code;
 };
 
 // for loop
@@ -114,17 +66,6 @@ Blockly.Blocks['for'] = {
   }
 };
 
-Blockly.JavaScript['for'] = function(block) {
-  let number_loop = block.getFieldValue('loop');
-  let statements_inner_for = Blockly.JavaScript.statementToCode(
-    block,
-    'inner for'
-  );
-  // TODO: Assemble JavaScript into code letiable.
-  let code = 'for i in range' + number_loop + ':\n' + statements_inner_for;
-  return code;
-};
-
 // number
 Blockly.Blocks['number'] = {
   init: function() {
@@ -138,14 +79,6 @@ Blockly.Blocks['number'] = {
       'https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#wdgtsd'
     );
   }
-};
-
-Blockly.JavaScript['number'] = function(block) {
-  let number_number = block.getFieldValue('number');
-  // TODO: Assemble JavaScript into code letiable.
-  let code = number_number;
-  // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
 // turn right
@@ -171,12 +104,6 @@ Blockly.Blocks['turn_right'] = {
   }
 };
 
-Blockly.JavaScript['turn_right'] = function(block) {
-  // TODO: Assemble JavaScript into code letiable.
-  let code = 'turnRight();\n';
-  return code;
-};
-
 // turn left
 Blockly.Blocks['turn_left'] = {
   init: function() {
@@ -198,10 +125,4 @@ Blockly.Blocks['turn_left'] = {
       'https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#y2b6c5'
     );
   }
-};
-
-Blockly.JavaScript['turn_left'] = function(block) {
-  // TODO: Assemble JavaScript into code letiable.
-  let code = 'turnLeft();\n';
-  return code;
 };

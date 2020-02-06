@@ -24,7 +24,7 @@
 import React from 'react';
 import './App.css';
 
-import BlocklyComponent, { Block, Value, Field, Shadow } from './Blockly';
+import BlocklyComponent, { Block } from './Blockly';
 
 import BlocklyJS from 'blockly/javascript';
 
@@ -33,24 +33,57 @@ import './generator/generator';
 
 import Header from './components/header/header.component';
 import World from './components/world/world.component';
+import { ReactComponent as Play } from './images/play.svg';
 
-// import parsingMovement from './components/player/parsingMovement';
+import animate from './utils/animate';
+
+/// test modal
+// import Modal from 'react-modal';
+
+// const customStyles = {
+//   content: {
+//     top: '50%',
+//     left: '50%',
+//     right: 'auto',
+//     bottom: 'auto',
+//     marginRight: '-50%',
+//     transform: 'translate(-50%, -50%)'
+//   }
+// };
+
+// Modal.setAppElement(document.getElementById('root'));
+
+///
 
 class App extends React.Component {
-  generateCode = () => {
-    // var code = BlocklyJS.workspaceToCode(this.simpleWorkspace.workspace);
-    console.log(this.simpleWorkspace.workspace.getAllBlocks());
-    let id = this.simpleWorkspace.workspace.getAllBlocks()[0].id;
-    this.simpleWorkspace.workspace.highlightBlock(id);
+  // constructor() {
+  //   super();
 
-    this.simpleWorkspace.workspace.highlightBlock(null);
-    // console.log(this.simpleWorkspace.workspace.topBlock_);
-    // console.log(id);
-    // let id = this.simpleWorkspace.workspace.topBlock.id;
-    // this.simpleWorkspace.workspace.highlightBlock(id);
-    // console.log(this.simpleWorkspace.workspace);
-    // console.log(code);
-    // parsingMovement(code);
+  //   this.state = {
+  //     modalIsOpen: false
+  //   };
+
+  //   this.openModal = this.openModal.bind(this);
+  //   this.afterOpenModal = this.afterOpenModal.bind(this);
+  //   this.closeModal = this.closeModal.bind(this);
+  // }
+
+  // openModal() {
+  //   this.setState({ modalIsOpen: true });
+  // }
+
+  // afterOpenModal() {
+  //   // references are now sync'd and can be accessed.
+  //   this.subtitle.style.color = '#f00';
+  // }
+
+  // closeModal() {
+  //   this.setState({ modalIsOpen: false });
+  // }
+
+  generateCode = () => {
+    let code = BlocklyJS.workspaceToCode(this.simpleWorkspace.workspace);
+    animate(code, this.simpleWorkspace.workspace);
   };
 
   render() {
@@ -58,52 +91,31 @@ class App extends React.Component {
       <div className='App'>
         <Header />
         <div className='Game'>
-          <World />
-          <button onClick={this.generateCode}>Convert</button>
-          <BlocklyComponent
-            ref={e => (this.simpleWorkspace = e)}
-            readOnly={false}
-            move={{
-              scrollbars: true,
-              drag: true,
-              wheel: true
-            }}
-            initialXml={`
-<xml xmlns="http://www.w3.org/1999/xhtml">
-<block type="controls_ifelse" x="0" y="0"></block>
-</xml>
-      `}
-          >
-            <Block type='go_ahead' />
-            <Block type='turn_right' />
-            <Block type='turn_left' />
-            <Block type='for' />
-            <Block type='number' />
-            <Block type='test_react_field' />
-            <Block type='test_react_date_field' />
-            <Block type='controls_ifelse' />
-            <Block type='logic_compare' />
-            <Block type='logic_operation' />
-            <Block type='controls_repeat_ext'>
-              <Value name='TIMES'>
-                <Shadow type='math_number'>
-                  <Field name='NUM'>10</Field>
-                </Shadow>
-              </Value>
-            </Block>
-            <Block type='logic_operation' />
-            <Block type='logic_negate' />
-            <Block type='logic_boolean' />
-            <Block type='logic_null' disabled='true' />
-            <Block type='logic_ternary' />
-            <Block type='text_charAt'>
-              <Value name='VALUE'>
-                <Block type='variables_get'>
-                  <Field name='VAR'>text</Field>
-                </Block>
-              </Value>
-            </Block>
-          </BlocklyComponent>
+          <div className='LeftPane'>
+            <World />
+            <div className='ConvertBtnPane'>
+              <button className='ConvertBtn' onClick={this.generateCode}>
+                <div>RUN</div>
+                <Play className='Play' />
+              </button>
+            </div>
+          </div>
+          <div className='RightPane'>
+            <BlocklyComponent
+              ref={e => (this.simpleWorkspace = e)}
+              readOnly={false}
+              move={{
+                scrollbars: false,
+                drag: true,
+                wheel: true
+              }}
+            >
+              <Block type='go_ahead' />
+              <Block type='turn_right' />
+              <Block type='turn_left' />
+              <Block type='for' />
+            </BlocklyComponent>
+          </div>
         </div>
       </div>
     );

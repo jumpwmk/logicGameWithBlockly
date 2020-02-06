@@ -17,7 +17,8 @@ function getSpriteLocation(direction, walkIndex) {
 const initialState = {
   direction: 'NORTH',
   spriteLocation: getSpriteLocation('NORTH', 0),
-  position: [120, 400],
+  position: [80, 360],
+  begin_position: [80, 360],
   walkIndex: 0
 };
 
