@@ -1,9 +1,6 @@
 .world {
-  width: 600px;
-  height: 600px;
+  width: 520px;
+  height: 520px;
   margin: 25px auto;
-  display: flex;
-  flex-flow: row;
-  align-items: center;
-  background-color: cornsilk;
+  position: 'relative';
 }

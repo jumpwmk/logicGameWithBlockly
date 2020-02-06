@@ -11,8 +11,8 @@ function Player(props) {
     <div
       style={{
         position: 'absolute',
-        top: player.position[1] + 2,
-        left: player.position[0] + 5,
+        top: player.position[1],
+        left: player.position[0],
         backgroundImage: `url('${WalkSprite}')`,
         backgroundPosition: player.spriteLocation,
         width: '40px',

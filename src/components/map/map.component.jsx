@@ -1,56 +1,69 @@
-import React from "react";
-import { connect } from "react-redux";
+import React from 'react';
+import { connect } from 'react-redux';
 
-import { SPRITE_SIZE } from "../../config/constants";
+import { SPRITE_SIZE } from '../../config/constants';
+import { FINAL } from '../../config/tile';
 
-import "./map.styles.scss";
+import './map.styles.scss';
 
 function getTileSprite(type) {
+  type = type & 15;
   switch (type) {
     case 0:
-      return "zero";
+      return 'zero';
     case 1:
-      return "u";
+      return 'u';
     case 2:
-      return "r";
+      return 'r';
     case 3:
-      return "ur";
+      return 'ur';
     case 4:
-      return "d";
+      return 'd';
     case 5:
-      return "ud";
+      return 'ud';
     case 6:
-      return "rd";
+      return 'rd';
     case 7:
-      return "urd";
+      return 'urd';
     case 8:
-      return "l";
+      return 'l';
     case 9:
-      return "ul";
+      return 'ul';
     case 10:
-      return "rl";
+      return 'rl';
     case 11:
-      return "url";
+      return 'url';
     case 12:
-      return "dl";
+      return 'dl';
     case 13:
-      return "udl";
+      return 'udl';
     case 14:
-      return "rdl";
+      return 'rdl';
     case 15:
-      return "urdl";
+      return 'urdl';
     default:
   }
 }
 
+function getTileFinal(type) {
+  if (type & FINAL) {
+    return true;
+  }
+  return false;
+}
+
 function MapTile(props) {
-  return <div className={`tile ${getTileSprite(props.tile)}`} />;
+  if (getTileFinal(props.tile)) {
+    return <div className={`tile ${getTileSprite(props.tile)} final`} />;
+  } else {
+    return <div className={`tile ${getTileSprite(props.tile)}`} />;
+  }
 }
 
 function MapRow(props) {
   return (
     <div
-      className="row"
+      className='row'
       style={{
         height: SPRITE_SIZE
       }}
@@ -66,13 +79,7 @@ function Map(props) {
   const { map } = props;
 
   return (
-    <div
-      style={{
-        width: "600px",
-        height: "600px",
-        border: "4px solid #000"
-      }}
-    >
+    <div style={{ width: '520px', height: '520px', border: '4px solid #000' }}>
       {map.tiles.map(row => (
         <MapRow tiles={row} />
       ))}

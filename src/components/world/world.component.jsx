@@ -8,7 +8,7 @@ import { tiles } from '../../config/tiles';
 import store from '../../config/store';
 
 function World(props) {
-  const { world } = props;
+  // const { world } = props;
   // set map tiles for current map
   store.dispatch({
     type: 'ADD_TILES',
@@ -18,10 +18,10 @@ function World(props) {
   return (
     <div
       style={{
-        position: 'relative',
-        width: '600px',
-        height: '600px',
-        margin: '25px auto'
+        width: '520px',
+        height: '520px',
+        margin: '0px 50px 30px 50px',
+        position: 'relative'
       }}
     >
       <Map />

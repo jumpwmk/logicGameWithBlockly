@@ -11,7 +11,7 @@ export function attemptMove(nxtMove) {
 
   direction = nxtDirection;
 
-  if (nxtMove === 'RIGHT' || nxtMove === 'LEFT') {
+  if (nxtMove === 'TURN_RIGHT' || nxtMove === 'TURN_LEFT') {
     dispatchMove(direction, newPos);
   } else if (
     observeBoundaries(newPos) &&
@@ -39,7 +39,7 @@ function getNewPosition(direction, nxtMove) {
   const oldPos = store.getState().player.position;
   const newPos = [oldPos[0], oldPos[1]];
   switch (nxtMove) {
-    case 'RIGHT':
+    case 'TURN_RIGHT':
       switch (direction) {
         case 'WEST':
           return { nxtDirection: 'NORTH', newPos: newPos };
@@ -52,7 +52,7 @@ function getNewPosition(direction, nxtMove) {
         default:
       }
       break;
-    case 'LEFT':
+    case 'TURN_LEFT':
       switch (direction) {
         case 'WEST':
           return { nxtDirection: 'SOUTH', newPos: newPos };
