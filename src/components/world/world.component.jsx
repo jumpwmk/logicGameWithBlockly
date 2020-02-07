@@ -5,7 +5,7 @@ import Map from '../map/map.component';
 import Player from '../player/player.component';
 
 import { tiles } from '../../config/tiles';
-import store from '../../config/store';
+import { store } from '../../redux/store';
 
 function World(props) {
   // const { world } = props;

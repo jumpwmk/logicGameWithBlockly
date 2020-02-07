@@ -38,7 +38,7 @@
   result: the result after running the code
 */
 
-import store from '../config/store';
+import { store } from '../redux/store';
 import { tiles } from '../config/tiles';
 import { SPRITE_SIZE } from '../config/constants';
 import { FINAL } from '../config/tile';

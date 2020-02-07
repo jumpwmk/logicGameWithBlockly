@@ -1,4 +1,4 @@
-import store from '../../config/store';
+import { store } from '../../redux/store';
 import { SPRITE_SIZE, MAP_WIDTH, MAP_HEIGHT } from '../../config/constants';
 
 export function attemptMove(nxtMove) {

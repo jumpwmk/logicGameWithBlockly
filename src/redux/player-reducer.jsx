@@ -1,4 +1,4 @@
-import { SPRITE_SIZE } from '../../config/constants';
+import { SPRITE_SIZE } from '../config/constants';
 
 function getSpriteLocation(direction, walkIndex) {
   switch (direction) {
