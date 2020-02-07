@@ -22,101 +22,46 @@
  */
 
 import React from 'react';
+import { Switch, Route } from 'react-router-dom';
 import './App.css';
 
-import BlocklyComponent, { Block } from './Blockly';
-
-import BlocklyJS from 'blockly/javascript';
-
-import './blocks/customblocks';
-import './generator/generator';
-
 import Header from './components/header/header.component';
-import World from './components/world/world.component';
-import { ReactComponent as Play } from './images/play.svg';
 
-import animate from './utils/animate';
-
-/// test modal
-// import Modal from 'react-modal';
-
-// const customStyles = {
-//   content: {
-//     top: '50%',
-//     left: '50%',
-//     right: 'auto',
-//     bottom: 'auto',
-//     marginRight: '-50%',
-//     transform: 'translate(-50%, -50%)'
-//   }
-// };
-
-// Modal.setAppElement(document.getElementById('root'));
-
-///
+import HomePage from './pages/homepage/homepage.component';
+import SignInSignUp from './pages/sign-in-sign-up/sign-in-sign-up.component';
+import { auth } from './firebase/firebase.utils';
 
 class App extends React.Component {
-  // constructor() {
-  //   super();
+  constructor() {
+    super();
 
-  //   this.state = {
-  //     modalIsOpen: false
-  //   };
+    this.state = {
+      currentUser: null
+    };
+  }
 
-  //   this.openModal = this.openModal.bind(this);
-  //   this.afterOpenModal = this.afterOpenModal.bind(this);
-  //   this.closeModal = this.closeModal.bind(this);
-  // }
+  unsubscribeFromAuth = null;
 
-  // openModal() {
-  //   this.setState({ modalIsOpen: true });
-  // }
+  componentDidMount() {
+    this.unsubscribeFromAuth = auth.onAuthStateChanged(user => {
+      this.setState({ currentUser: user });
 
-  // afterOpenModal() {
-  //   // references are now sync'd and can be accessed.
-  //   this.subtitle.style.color = '#f00';
-  // }
+      console.log(user);
+    });
+  }
 
-  // closeModal() {
-  //   this.setState({ modalIsOpen: false });
-  // }
-
-  generateCode = () => {
-    let code = BlocklyJS.workspaceToCode(this.simpleWorkspace.workspace);
-    animate(code, this.simpleWorkspace.workspace);
-  };
+  componentWillUnmount() {
+    this.unsubscribeFromAuth();
+  }
 
   render() {
     return (
       <div className='App'>
-        <Header />
-        <div className='Game'>
-          <div className='LeftPane'>
-            <World />
-            <div className='ConvertBtnPane'>
-              <button className='ConvertBtn' onClick={this.generateCode}>
-                <div>RUN</div>
-                <Play className='Play' />
-              </button>
-            </div>
-          </div>
-          <div className='RightPane'>
-            <BlocklyComponent
-              ref={e => (this.simpleWorkspace = e)}
-              readOnly={false}
-              move={{
-                scrollbars: false,
-                drag: true,
-                wheel: true
-              }}
-            >
-              <Block type='go_ahead' />
-              <Block type='turn_right' />
-              <Block type='turn_left' />
-              <Block type='for' />
-            </BlocklyComponent>
-          </div>
-        </div>
+        <Header currentUser={this.state.currentUser} />
+        <Switch>
+          <Route exact path='/' component={HomePage} />
+          <Route exact path='/signin' component={SignInSignUp} />
+        </Switch>
       </div>
     );
   }

@@ -2,48 +2,58 @@
   height: 50px;
   width: 100%;
   display: flex;
-  justify-content: center;
-  margin-bottom: 25px;
-  padding: 20px 100px;
+  justify-content: space-between;
   background-color: #e6e6e6;
+  // margin-bottom: 25px;
 
   .logo-container {
-    height: 100%;
-    width: 50px;
-    margin-left: 100px;
+    height: 70%;
+    width: 70px;
+    padding: 10px 70px;
   }
 
-  .spacer {
-    width: 20%;
-  }
-
-  .profile {
+  .options {
+    width: 50%;
     height: 100%;
-    width: 130px;
-    justify-content: left;
+    display: flex;
     align-items: center;
-    margin: auto;
+    justify-content: flex-end;
+    vertical-align: middle;
+    padding: 5px 15px;
 
-    .name {
-      width: 60%;
-      height: 100%;
-      float: left;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-left: 7%;
-    }
-
-    .pic {
-      margin-left: 45%;
-      height: 30px;
-      width: 30px;
-      display: flex;
-      margin-top: 10px;
+    .option {
+      padding: 5px 70px;
+      cursor: pointer;
     }
   }
 
-  .profile:hover {
+  // .profile {
+  //   height: 100%;
+  //   width: 130px;
+  //   justify-content: left;
+  //   align-items: center;
+  //   margin: auto;
+
+  //   .name {
+  //     width: 60%;
+  //     height: 100%;
+  //     float: left;
+  //     display: flex;
+  //     align-items: center;
+  //     justify-content: center;
+  //     margin-left: 7%;
+  //   }
+
+  //   .pic {
+  //     margin-left: 45%;
+  //     height: 30px;
+  //     width: 30px;
+  //     display: flex;
+  //     margin-top: 10px;
+  //   }
+  // }
+
+  .option:hover {
     background-color: rgba(217, 217, 217, 0.3);
     cursor: pointer;
   }
