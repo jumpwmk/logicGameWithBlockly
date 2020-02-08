@@ -28,6 +28,10 @@ const playerReducer = (state = initialState, action) => {
       return {
         ...action.payload
       };
+    case 'INIT_PLAYER':
+      return {
+        ...action.payload
+      };
     default:
       return state;
   }

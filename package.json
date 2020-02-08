@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
+    "axios": "^0.19.2",
     "blockly": "^3.20200123.1",
     "firebase": "^7.8.0",
     "node-sass": "^4.13.1",
@@ -17,9 +18,9 @@
     "redux-persist": "^6.0.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "REACT_APP_NODE_ENV=development react-scripts start",
+    "build": "REACT_APP_NODE_ENV=test react-scripts build",
+    "test": "REACT_APP_NODE_ENV=test react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
