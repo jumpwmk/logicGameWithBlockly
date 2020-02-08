@@ -114,7 +114,7 @@ function MapEndPortal({ x, y }) {
 
 function Map(props) {
   const { map } = props;
-  // console.log(map.tiles.platform);
+  console.log(map.tiles.platform);
 
   return (
     <div className='map'>

@@ -60,8 +60,8 @@ export function placeEndPortal(x, y) {
 export function placePlayer(x, y, facing, map) {
   let src = 'player-' + facing;
   let pos = calcTilePos(x, y);
-  let top = pos.top - (PLAYER_H - TILE_H) - (TILE_H / 8) * 3 + 'px';
-  let left = pos.left + (TILE_W - PLAYER_W) / 2 + 'px';
+  let top = pos.top - (PLAYER_H - TILE_H) - TILE_H / 4 + 'px';
+  let left = 5 + pos.left + (TILE_W - PLAYER_W) / 2 + 'px';
   let player = {
     top: top,
     left: left,

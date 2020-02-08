@@ -1,7 +1,7 @@
 const initialState = {
   facing: 'yf',
   position: [5, 2],
-  begin_position: [5, 2]
+  beginPosition: [5, 2]
 };
 
 const playerReducer = (state = initialState, action) => {

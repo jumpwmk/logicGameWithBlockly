@@ -26,7 +26,6 @@ import React from 'react';
 import BlocklyComponent, { Block } from '../../Blockly';
 
 import BlocklyJS from 'blockly/javascript';
-// import Blockly from 'blockly/blockly';
 
 import '../../blocks/customblocks';
 import '../../generator/generator';
