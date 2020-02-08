@@ -3,29 +3,26 @@ import { connect } from 'react-redux';
 
 import Map from '../map/map.component';
 import Player from '../player/player.component';
+import MaxBlocks from '../max-blocks/max-blocks.component';
 
 import { tiles } from '../../config/tiles';
 import { store } from '../../redux/store';
+
+import './world.styles.scss';
 
 function World(props) {
   // const { world } = props;
   // set map tiles for current map
   store.dispatch({
     type: 'ADD_TILES',
-    payload: { tiles }
+    payload: { ...tiles }
   });
 
   return (
-    <div
-      style={{
-        width: '520px',
-        height: '520px',
-        margin: '0px 50px 30px 50px',
-        position: 'relative'
-      }}
-    >
+    <div className='world'>
       <Map />
       <Player />
+      <MaxBlocks />
     </div>
   );
 }

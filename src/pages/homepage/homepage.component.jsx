@@ -26,6 +26,7 @@ import React from 'react';
 import BlocklyComponent, { Block } from '../../Blockly';
 
 import BlocklyJS from 'blockly/javascript';
+// import Blockly from 'blockly/blockly';
 
 import '../../blocks/customblocks';
 import '../../generator/generator';
@@ -91,6 +92,7 @@ class Homepage extends React.Component {
   };
 
   render() {
+    // Blockly.inject({ maxBlocks: 5, trashcan: true });
     return (
       <div className='HomePage'>
         <div className='Game'>
@@ -117,6 +119,7 @@ class Homepage extends React.Component {
               <Block type='turn_right' />
               <Block type='turn_left' />
               <Block type='for' />
+              <Block type='while_inf' />
             </BlocklyComponent>
           </div>
         </div>

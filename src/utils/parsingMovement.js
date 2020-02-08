@@ -39,35 +39,37 @@
 */
 
 import { store } from '../redux/store';
-import { tiles } from '../config/tiles';
-import { SPRITE_SIZE } from '../config/constants';
 import { FINAL } from '../config/tile';
 
 function move(direction, id, coordinate) {
+  const tiles = store.getState().map.tiles;
+
   let COMMANDS = {
-    NORTH: 'GO_NORTH',
-    EAST: 'GO_EAST',
-    SOUTH: 'GO_SOUTH',
-    WEST: 'GO_WEST'
+    xb: 'GO_NORTH',
+    yf: 'GO_EAST',
+    xf: 'GO_SOUTH',
+    yb: 'GO_WEST'
   };
 
   let DIRECTION = {
-    NORTH: { nx_ii: -1, nx_jj: 0 },
-    EAST: { nx_ii: 0, nx_jj: 1 },
-    SOUTH: { nx_ii: 1, nx_jj: 0 },
-    WEST: { nx_ii: 0, nx_jj: -1 }
+    xb: { nx_ii: -1, nx_jj: 0 },
+    yf: { nx_ii: 0, nx_jj: 1 },
+    xf: { nx_ii: 1, nx_jj: 0 },
+    yb: { nx_ii: 0, nx_jj: -1 }
   };
 
   let { ii, jj } = coordinate;
 
   if (
-    (direction === 'NORTH' && (tiles[ii][jj] & 1) > 0) ||
-    (direction === 'EAST' && (tiles[ii][jj] & 2) > 0) ||
-    (direction === 'SOUTH' && (tiles[ii][jj] & 4) > 0) ||
-    (direction === 'WEST' && (tiles[ii][jj] & 8) > 0)
+    (direction === 'xb' && (tiles[ii][jj] & 1) > 0) ||
+    (direction === 'yf' && (tiles[ii][jj] & 2) > 0) ||
+    (direction === 'xf' && (tiles[ii][jj] & 4) > 0) ||
+    (direction === 'yb' && (tiles[ii][jj] & 8) > 0)
   ) {
     return { res: false, command: 'FAIL_FORWARD', block: id };
   }
+
+  console.log(direction);
 
   let { nx_ii, nx_jj } = DIRECTION[direction];
 
@@ -86,16 +88,16 @@ function turn(direction, command, id) {
   let COMMANDS = { turnLeft: 'TURN_LEFT', turnRight: 'TURN_RIGHT' };
 
   let DIRECTION_LEFT = {
-    NORTH: 'WEST',
-    EAST: 'NORTH',
-    SOUTH: 'EAST',
-    WEST: 'SOUTH'
+    xb: 'yb',
+    yf: 'xb',
+    xf: 'yf',
+    yb: 'xf'
   };
   let DIRECTION_RIGHT = {
-    NORTH: 'EAST',
-    EAST: 'SOUTH',
-    SOUTH: 'WEST',
-    WEST: 'NORTH'
+    xb: 'yf',
+    yf: 'xf',
+    xf: 'yb',
+    yb: 'xb'
   };
   if (command === 'turnLeft') direction = DIRECTION_LEFT[direction];
   if (command === 'turnRight') direction = DIRECTION_RIGHT[direction];
@@ -108,27 +110,29 @@ function turn(direction, command, id) {
 }
 
 function isPath(direction, command, id, coordinate) {
+  const tiles = store.getState().map.tiles;
+
   let { ii, jj } = coordinate;
-  let DIRECTION = { NORTH: 1, EAST: 2, SOUTH: 4, WEST: 8 };
+  let DIRECTION = { xb: 1, yf: 2, xf: 4, yb: 8 };
 
   let DIRECTION_LOOK = {
-    NORTH: 'LOOK_NORTH',
-    EAST: 'LOOK_EAST',
-    SOUTH: 'LOOK_SOUTH',
-    WEST: 'LOOK_WEST'
+    xb: 'LOOK_xb',
+    yf: 'LOOK_yf',
+    xf: 'LOOK_xf',
+    yb: 'LOOK_yb'
   };
 
-  let DIRECTION_RIGHT = {
-    NORTH: 'EAST',
-    EAST: 'SOUTH',
-    SOUTH: 'WEST',
-    WEST: 'NORTH'
-  };
   let DIRECTION_LEFT = {
-    NORTH: 'WEST',
-    EAST: 'NORTH',
-    SOUTH: 'EAST',
-    WEST: 'SOUTH'
+    xb: 'yb',
+    yf: 'xb',
+    xf: 'yf',
+    yb: 'xf'
+  };
+  let DIRECTION_RIGHT = {
+    xb: 'yf',
+    yf: 'xf',
+    xf: 'yb',
+    yb: 'xb'
   };
 
   if (command === 'right') {
@@ -146,11 +150,13 @@ function isPath(direction, command, id, coordinate) {
 function parsingMovement(code) {
   let counts = {};
 
+  const tiles = store.getState().map.tiles;
+
   let lines = code.split('\n');
-  let direction = store.getState().player.direction;
+  let direction = store.getState().player.facing;
   let pos = store.getState().player.position;
-  let ii = pos[1] / SPRITE_SIZE;
-  let jj = pos[0] / SPRITE_SIZE;
+  let ii = pos[0];
+  let jj = pos[1];
 
   let commands = [];
   let blocks = [];

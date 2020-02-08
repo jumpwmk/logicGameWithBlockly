@@ -73,3 +73,20 @@ Blockly.JavaScript['for'] = function(block) {
     ' end\n';
   return code;
 };
+
+Blockly.JavaScript['while_inf'] = function(block) {
+  var statements_inner_loop = Blockly.JavaScript.statementToCode(
+    block,
+    'inner_loop'
+  );
+  // TODO: Assemble JavaScript into code variable.
+  let code =
+    block.id +
+    ' for 1000 ' +
+    block.id +
+    ' begin\n' +
+    statements_inner_loop +
+    block.id +
+    ' end\n';
+  return code;
+};
