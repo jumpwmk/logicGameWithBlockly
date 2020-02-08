@@ -35,6 +35,17 @@ class BlocklyComponent extends React.Component {
     const { initialXml, children, ...rest } = this.props;
     this.primaryWorkspace = Blockly.inject(this.blocklyDiv, {
       toolbox: this.toolbox,
+      maxBlocks: 5,
+      trashcan: true,
+      zoom: {
+        controls: true,
+        wheel: true,
+        startScale: 1.0,
+        maxScale: 3,
+        minScale: 0.3,
+        scaleSpeed: 1.2
+      },
+      grid: { spacing: 30, length: 3, colour: '#ccc', snap: true },
       ...rest
     });
 

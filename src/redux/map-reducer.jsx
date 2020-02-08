@@ -1,6 +1,4 @@
-const initialState = {
-  tiles: []
-};
+const initialState = {};
 
 const mapReducer = (state = initialState, action) => {
   switch (action.type) {

@@ -66,6 +66,22 @@ Blockly.Blocks['for'] = {
   }
 };
 
+// for inf
+Blockly.Blocks['while_inf'] = {
+  init: function() {
+    this.appendDummyInput().appendField('while true');
+    this.appendStatementInput('inner_loop')
+      .setCheck(null)
+      .appendField('ทำ');
+    this.setPreviousStatement(true, null);
+    this.setColour(135);
+    this.setTooltip('for inf');
+    this.setHelpUrl(
+      'https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#hq4zhn'
+    );
+  }
+};
+
 // number
 Blockly.Blocks['number'] = {
   init: function() {

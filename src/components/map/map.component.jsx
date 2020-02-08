@@ -4,85 +4,131 @@ import { connect } from 'react-redux';
 import { SPRITE_SIZE } from '../../config/constants';
 import { FINAL } from '../../config/tile';
 
+import {
+  placePlatformTile,
+  placeWall,
+  placeEndPortal
+} from '../../utils/generateMap';
+
 import './map.styles.scss';
 
-function getTileSprite(type) {
-  type = type & 15;
-  switch (type) {
-    case 0:
-      return 'zero';
-    case 1:
-      return 'u';
-    case 2:
-      return 'r';
-    case 3:
-      return 'ur';
-    case 4:
-      return 'd';
-    case 5:
-      return 'ud';
-    case 6:
-      return 'rd';
-    case 7:
-      return 'urd';
-    case 8:
-      return 'l';
-    case 9:
-      return 'ul';
-    case 10:
-      return 'rl';
-    case 11:
-      return 'url';
-    case 12:
-      return 'dl';
-    case 13:
-      return 'udl';
-    case 14:
-      return 'rdl';
-    case 15:
-      return 'urdl';
-    default:
-  }
-}
-
-function getTileFinal(type) {
-  if (type & FINAL) {
-    return true;
-  }
-  return false;
-}
-
 function MapTile(props) {
-  if (getTileFinal(props.tile)) {
-    return <div className={`tile ${getTileSprite(props.tile)} final`} />;
-  } else {
-    return <div className={`tile ${getTileSprite(props.tile)}`} />;
-  }
-}
-
-function MapRow(props) {
+  if (!props.tile) return null;
+  const { className, ...tile } = placePlatformTile(
+    props.index_i,
+    props.index_j
+  );
   return (
     <div
-      className='row'
+      id={props.index_i * 12 + props.index_j}
       style={{
-        height: SPRITE_SIZE
+        position: 'absolute',
+        top: tile.top,
+        left: tile.left,
+        width: tile.width,
+        height: tile.height
       }}
-    >
-      {props.tiles.map(tile => (
-        <MapTile tile={tile} />
-      ))}
-    </div>
+      className={className}
+    />
+  );
+}
+
+function MapWall(props) {
+  if (props.wall === null || props.wall === undefined) return null;
+  const { className, ...wall } = placeWall(props.index_i, props.index_j);
+  return (
+    <React.Fragment>
+      {props.wall.yf !== undefined ? (
+        <div
+          id={props.index_i * 12 + props.index_j}
+          style={{
+            position: 'absolute',
+            top: wall.top,
+            left: wall.left,
+            width: wall.width,
+            height: wall.height
+          }}
+          className='platformwall-yf-1'
+        />
+      ) : null}
+      {props.wall.yb !== undefined ? (
+        <div
+          id={props.index_i * 12 + props.index_j}
+          style={{
+            position: 'absolute',
+            top: wall.top,
+            left: wall.left,
+            width: wall.width,
+            height: wall.height
+          }}
+          className='platformwall-yb-1'
+        />
+      ) : null}
+      {props.wall.xf !== undefined ? (
+        <div
+          id={props.index_i * 12 + props.index_j}
+          style={{
+            position: 'absolute',
+            top: wall.top,
+            left: wall.left,
+            width: wall.width,
+            height: wall.height
+          }}
+          className='platformwall-xf-1'
+        />
+      ) : null}
+      {props.wall.xb !== undefined ? (
+        <div
+          id={props.index_i * 12 + props.index_j}
+          style={{
+            position: 'absolute',
+            top: wall.top,
+            left: wall.left,
+            width: wall.width,
+            height: wall.height
+          }}
+          className='platformwall-xb-1'
+        />
+      ) : null}
+    </React.Fragment>
+  );
+}
+
+function MapEndPortal({ x, y }) {
+  const { className, ...tile } = placeEndPortal(x, y);
+  console.log(className);
+  return (
+    <div
+      id={x * 12 + y}
+      style={{
+        position: 'absolute',
+        top: tile.top,
+        left: tile.left,
+        width: tile.width,
+        height: tile.height
+      }}
+      className={className}
+    />
   );
 }
 
 function Map(props) {
   const { map } = props;
+  // console.log(map.tiles.platform);
 
   return (
-    <div style={{ width: '520px', height: '520px', border: '4px solid #000' }}>
-      {map.tiles.map(row => (
-        <MapRow tiles={row} />
-      ))}
+    <div className='map'>
+      {map.platform.map((row, index_i) =>
+        row.map((tile, index_j) => (
+          <MapTile tile={tile} index_i={index_i} index_j={index_j} />
+        ))
+      )}
+      {map.wall.map((row, index_i) =>
+        row.map((wall, index_j) => (
+          <MapWall wall={wall} index_i={index_i} index_j={index_j} />
+        ))
+      )}
+      {MapEndPortal(map.end)}
     </div>
   );
 }

@@ -1,23 +1,31 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import WalkSprite from './player_walk.png';
 import handleMovement from './movement';
+
+import { placePlayer } from '../../utils/generateMap';
+
+import './player.styles.scss';
 
 function Player(props) {
   const { player } = props;
+
+  const { className, ...tile } = placePlayer(
+    player.position[0],
+    player.position[1],
+    player.facing
+  );
 
   return (
     <div
       style={{
         position: 'absolute',
-        top: player.position[1],
-        left: player.position[0],
-        backgroundImage: `url('${WalkSprite}')`,
-        backgroundPosition: player.spriteLocation,
-        width: '40px',
-        height: '40px'
+        top: tile.top,
+        left: tile.left,
+        width: tile.width,
+        height: tile.height
       }}
+      className={className}
     />
   );
 }
