@@ -5,6 +5,6 @@ export const withBackendUrl = url => {
   }
   if (process.env.REACT_APP_NODE_ENV === 'test') {
     // Wait for real url
-    return 'https://armaplatform.firebaseapp.com/api' + url;
+    return 'http://localhost:3001' + url;
   }
 };

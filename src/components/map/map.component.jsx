@@ -1,9 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { SPRITE_SIZE } from '../../config/constants';
-import { FINAL } from '../../config/tile';
-
 import {
   placePlatformTile,
   placeWall,
@@ -96,7 +93,6 @@ function MapWall(props) {
 
 function MapEndPortal({ x, y }) {
   const { className, ...tile } = placeEndPortal(x, y);
-  console.log(className);
   return (
     <div
       id={x * 12 + y}

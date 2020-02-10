@@ -18,7 +18,9 @@ const Header = props => {
 
   return (
     <div className='header'>
-      <Logo className='logo-container' />
+      <Link to='/'>
+        <Logo className='logo-container' />
+      </Link>
       <div className='options'>
         {user.currentUser ? (
           <div className='option' onClick={() => auth.signOut()}>

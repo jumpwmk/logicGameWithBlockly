@@ -24,6 +24,8 @@
 import React from 'react';
 import './BlocklyComponent.css';
 
+import { store } from '../redux/store';
+
 import Blockly from 'blockly/core';
 import locale from 'blockly/msg/th';
 import 'blockly/blocks';
@@ -35,17 +37,6 @@ class BlocklyComponent extends React.Component {
     const { initialXml, children, ...rest } = this.props;
     this.primaryWorkspace = Blockly.inject(this.blocklyDiv, {
       toolbox: this.toolbox,
-      maxBlocks: 5,
-      trashcan: true,
-      zoom: {
-        controls: true,
-        wheel: true,
-        startScale: 1.0,
-        maxScale: 3,
-        minScale: 0.3,
-        scaleSpeed: 1.2
-      },
-      grid: { spacing: 30, length: 3, colour: '#ccc', snap: true },
       ...rest
     });
 
@@ -69,7 +60,7 @@ class BlocklyComponent extends React.Component {
   }
 
   render() {
-    const { children } = this.props;
+    const { children, blocks } = this.props;
 
     return (
       <React.Fragment>

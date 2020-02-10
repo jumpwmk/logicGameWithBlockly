@@ -5,13 +5,15 @@ import map from './map-reducer';
 import world from './world-reducer';
 import user from './user-reducer';
 import blocks from './blocks-reducer';
+import congrats from './congrats-reducer';
 
 const rootReducer = combineReducers({
   player,
   map,
   world,
   user,
-  blocks
+  blocks,
+  congrats
 });
 
 export default rootReducer;

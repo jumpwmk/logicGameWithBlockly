@@ -22,6 +22,7 @@
  */
 
 import React from 'react';
+import { connect } from 'react-redux';
 
 import BlocklyComponent, { Block } from '../../Blockly';
 
@@ -32,75 +33,76 @@ import '../../generator/generator';
 
 import World from '../../components/world/world.component';
 import { ReactComponent as Play } from '../../images/play.svg';
+import { ReactComponent as Reset } from '../../images/reset.svg';
 
 import animate from '../../utils/animate';
-
-/// test modal
-import Modal from 'react-modal';
+import { store } from '../../redux/store';
+import { saveLog } from '../../utils/saveLog';
+import { fetchData } from '../../utils/fetchData';
+import Congrats from '../../components/congrats/congrats.component';
 
 import './homepage.styles.scss';
 
-const customStyles = {
-  overlay: {
-    position: 'fixed',
-    zIndex: 10000
-  },
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)'
-  }
-};
-
-Modal.setAppElement(document.getElementById('root'));
-
-///
-
 class Homepage extends React.Component {
-  constructor() {
-    super();
-
-    this.state = {
-      modalIsOpen: false
-    };
-
-    this.openModal = this.openModal.bind(this);
-    this.afterOpenModal = this.afterOpenModal.bind(this);
-    this.closeModal = this.closeModal.bind(this);
-  }
-
-  openModal() {
-    this.setState({ modalIsOpen: true });
-  }
-
-  afterOpenModal() {
-    // references are now sync'd and can be accessed.
-    this.subtitle.style.color = '#f00';
-  }
-
-  closeModal() {
-    this.setState({ modalIsOpen: false });
-  }
-
-  generateCode = () => {
+  changeMap = () => {
     let code = BlocklyJS.workspaceToCode(this.simpleWorkspace.workspace);
-    animate(code, this.simpleWorkspace.workspace);
+    saveLog({ code, type: 'change map' });
+    fetchData();
+  };
+
+  generateCode = async () => {
+    let code = BlocklyJS.workspaceToCode(this.simpleWorkspace.workspace);
+    store.dispatch({
+      type: 'CHANGE_STATE',
+      payload: { state: false }
+    });
+    const res = await animate(code, this.simpleWorkspace.workspace);
+    saveLog({ code, type: 'run', res });
+    if (res === 'SUCCESS') {
+      store.dispatch({
+        type: 'CHANGE_CONFIG_MODAL',
+        payload: { modalIsOpen: true }
+      });
+    }
+  };
+
+  cancelCode = () => {
+    let code = BlocklyJS.workspaceToCode(this.simpleWorkspace.workspace);
+    let player = store.getState().player;
+    this.simpleWorkspace.workspace.highlightBlock(null);
+    store.dispatch({
+      type: 'CHANGE_STATE',
+      payload: { state: true }
+    });
+    store.dispatch({
+      type: 'INIT_PLAYER',
+      payload: { position: player.beginPosition, facing: player.beginFacing }
+    });
+
+    saveLog({ code, type: 'run', res: 'INTERCEPTION' });
   };
 
   render() {
-    // Blockly.inject({ maxBlocks: 5, trashcan: true });
+    const { blocks } = this.props;
     return (
       <div className='HomePage'>
         <div className='Game'>
           <div className='LeftPane'>
             <World />
             <div className='ConvertBtnPane'>
-              <button className='ConvertBtn' onClick={this.generateCode}>
-                <div>RUN</div>
-                <Play className='Play' />
+              {blocks.state ? (
+                <button className='RunBtn' onClick={this.generateCode}>
+                  <div>RUN PROGRAM</div>
+                  <Play className='Play' />
+                </button>
+              ) : (
+                <button className='CancelBtn' onClick={this.cancelCode}>
+                  <div>RESET</div>
+                  <Reset className='Reset' />
+                </button>
+              )}
+              <button className='ChangeMapBtn' onClick={this.changeMap}>
+                <div>CHANGE MAP</div>
               </button>
             </div>
           </div>
@@ -113,6 +115,17 @@ class Homepage extends React.Component {
                 drag: true,
                 wheel: true
               }}
+              zoom={{
+                controls: true,
+                wheel: true,
+                startScale: 1.0,
+                maxScale: 3,
+                minScale: 0.3,
+                scaleSpeed: 1.2
+              }}
+              trashcan={true}
+              grid={{ spacing: 30, length: 3, colour: '#ccc', snap: true }}
+              maxBlocks={blocks.maxBlocks}
             >
               <Block type='go_ahead' />
               <Block type='turn_right' />
@@ -122,30 +135,14 @@ class Homepage extends React.Component {
             </BlocklyComponent>
           </div>
         </div>
-        <div>
-          <button onClick={this.openModal}>Open Modal</button>
-          <Modal
-            isOpen={this.state.modalIsOpen}
-            onAfterOpen={this.afterOpenModal}
-            onRequestClose={this.closeModal}
-            style={customStyles}
-            contentLabel='Example Modal'
-          >
-            <h2 ref={subtitle => (this.subtitle = subtitle)}>Hello</h2>
-            <button onClick={this.closeModal}>close</button>
-            <div>I am a modal</div>
-            <form>
-              <input />
-              <button>tab navigation</button>
-              <button>stays</button>
-              <button>inside</button>
-              <button>the modal</button>
-            </form>
-          </Modal>
-        </div>
+        <Congrats />
       </div>
     );
   }
 }
 
-export default Homepage;
+const mapStateToProps = ({ blocks }) => {
+  return { blocks };
+};
+
+export default connect(mapStateToProps)(Homepage);

@@ -24,43 +24,19 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
-import axios from 'axios';
 
 import Header from './components/header/header.component';
 
 import HomePage from './pages/homepage/homepage.component';
 import SignInSignUp from './pages/sign-in-sign-up/sign-in-sign-up.component';
 import { auth, createUserProfileDocument } from './firebase/firebase.utils';
+import { fetchData } from './utils/fetchData';
 
 import { store } from './redux/store';
-import { withBackendUrl } from './utils/withBackendUrl';
 
 import './App.css';
 
 class App extends React.Component {
-  fetchData = async () => {
-    const path = '/maps/get-map';
-    const data = {};
-    console.log(withBackendUrl(path));
-    await axios
-      .post(withBackendUrl(path), data)
-      .then(response => {
-        const { tiles, player } = response.data;
-        store.dispatch({
-          type: 'ADD_TILES',
-          payload: { ...tiles }
-        });
-        store.dispatch({
-          type: 'INIT_PLAYER',
-          payload: { ...player }
-        });
-      })
-      .catch(function(error) {
-        console.log(error);
-        return;
-      });
-  };
-
   unsubscribeFromAuth = null;
 
   componentDidMount() {
@@ -84,7 +60,7 @@ class App extends React.Component {
         payload: userAuth
       });
     });
-    this.fetchData();
+    fetchData();
   }
 
   componentWillUnmount() {
