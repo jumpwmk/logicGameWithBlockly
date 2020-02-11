@@ -1,5 +1,5 @@
 import parsingMovement from './parsingMovement';
-import { attemptMove } from '../components/player/movement';
+import { attemptMove, attemptCollect } from './movement';
 import sleep from './sleep';
 import { store } from '../redux/store';
 
@@ -18,7 +18,9 @@ async function animate(code, workspace) {
       command === 'TURN_LEFT'
     )
       attemptMove(command);
-    else if (command === 'FINISH') {
+    else if (command === 'COLLECT') {
+      attemptCollect();
+    } else if (command === 'FINISH') {
       console.log('success');
     } else if (command === 'FAIL_FORWARD') {
       console.log('failure');

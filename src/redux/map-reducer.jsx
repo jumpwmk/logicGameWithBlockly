@@ -107,6 +107,11 @@ const mapReducer = (state = initialState, action) => {
         ...state,
         ...action.payload
       };
+    case 'CHANGE_FLOATING_OBJ':
+      return {
+        ...state,
+        ...action.payload
+      };
     default:
       return state;
   }

@@ -6,7 +6,8 @@ import {
   TILE_W,
   TILE_H,
   PLAYER_H,
-  PLAYER_W
+  PLAYER_W,
+  FLOATING_OBJ_H
 } from '../config/constants';
 
 export function calcTilePos(x, y) {
@@ -70,4 +71,24 @@ export function placePlayer(x, y, facing, map) {
     className: src
   };
   return player;
+}
+
+export function placeFloatingObj(x, y, objtype, objvari, position) {
+  let src = 'floatingobj-' + objtype + '-' + objvari;
+  let pos = calcTilePos(x, y);
+  let top;
+  if (position[0] === x && position[1] === y) {
+    top = pos.top - (FLOATING_OBJ_H - TILE_H) - 40 + 'px';
+  } else {
+    top = pos.top - (FLOATING_OBJ_H - TILE_H) + 'px';
+  }
+  let left = pos.left + 'px';
+  let obj_ret = {
+    top: top,
+    left: left,
+    width: TILE_W + 'px',
+    height: FLOATING_OBJ_H + 'px',
+    className: src + ' with-player'
+  };
+  return obj_ret;
 }

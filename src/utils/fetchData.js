@@ -20,12 +20,13 @@ export async function fetchData() {
         payload: { ...player }
       });
       store.dispatch({
-        type: 'CHANGE_MAX_BLOCKS',
-        payload: { maxBlocks: blocks, state: true }
+        type: 'INIT_BLOCKS',
+        payload: { state: true, ...blocks }
       });
     })
     .catch(function(error) {
       console.log(error);
       return;
     });
+  console.log(store.getState().blocks);
 }

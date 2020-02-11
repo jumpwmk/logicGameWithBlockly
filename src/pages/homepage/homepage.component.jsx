@@ -40,6 +40,7 @@ import { store } from '../../redux/store';
 import { saveLog } from '../../utils/saveLog';
 import { fetchData } from '../../utils/fetchData';
 import Congrats from '../../components/congrats/congrats.component';
+import { MAP_W, MAP_H } from '../../config/constants';
 
 import './homepage.styles.scss';
 
@@ -57,6 +58,7 @@ class Homepage extends React.Component {
       payload: { state: false }
     });
     const res = await animate(code, this.simpleWorkspace.workspace);
+    console.log(store.getState().blocks);
     saveLog({ code, type: 'run', res });
     if (res === 'SUCCESS') {
       store.dispatch({
@@ -70,13 +72,38 @@ class Homepage extends React.Component {
     let code = BlocklyJS.workspaceToCode(this.simpleWorkspace.workspace);
     let player = store.getState().player;
     this.simpleWorkspace.workspace.highlightBlock(null);
+
     store.dispatch({
       type: 'CHANGE_STATE',
       payload: { state: true }
     });
+
     store.dispatch({
       type: 'INIT_PLAYER',
       payload: { position: player.beginPosition, facing: player.beginFacing }
+    });
+
+    const { floatingobj } = store.getState().map;
+    for (let i = 0; i < MAP_W; i++) {
+      for (let j = 0; j < MAP_H; j++) {
+        if (floatingobj[i][j] !== null) {
+          floatingobj[i][j].visible = true;
+        }
+      }
+    }
+
+    store.dispatch({
+      type: 'CHANGE_FLOATING_OBJ',
+      payload: {
+        floatingobj: floatingobj
+      }
+    });
+
+    store.dispatch({
+      type: 'COLLECT_GEMS',
+      payload: {
+        cntGems: 0
+      }
     });
 
     saveLog({ code, type: 'run', res: 'INTERCEPTION' });
@@ -130,6 +157,7 @@ class Homepage extends React.Component {
               <Block type='go_ahead' />
               <Block type='turn_right' />
               <Block type='turn_left' />
+              <Block type='collect' />
               <Block type='for' />
               <Block type='while_inf' />
             </BlocklyComponent>

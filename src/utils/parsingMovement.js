@@ -41,7 +41,8 @@
 import { store } from '../redux/store';
 import { FINAL } from '../config/tile';
 
-function move(direction, id, coordinate) {
+function move(obj) {
+  let { direction, id, coordinate } = obj;
   const tiles = store.getState().map.tiles;
 
   let COMMANDS = {
@@ -84,7 +85,8 @@ function move(direction, id, coordinate) {
   };
 }
 
-function turn(direction, command, id) {
+function turn(obj) {
+  let { direction, command, id } = obj;
   let COMMANDS = { turnLeft: 'TURN_LEFT', turnRight: 'TURN_RIGHT' };
 
   let DIRECTION_LEFT = {
@@ -107,6 +109,20 @@ function turn(direction, command, id) {
     res: true,
     direction: direction
   };
+}
+
+function collect(obj) {
+  let { id, coordinate } = obj;
+  const floatingobj = store.getState().map.floatingobj;
+  let { ii, jj } = coordinate;
+  console.log(floatingobj);
+  if (floatingobj[ii][jj] !== null && floatingobj[ii][jj].visible) {
+    return {
+      command: 'COLLECT',
+      block: id,
+      res: true
+    };
+  }
 }
 
 function isPath(direction, command, id, coordinate) {
@@ -174,8 +190,8 @@ function parsingMovement(code) {
       break;
     }
     if (line[1] === 'moveForward') {
-      const res = move(direction, id, { ii: ii, jj: jj });
-      if (res.res === true) {
+      const res = move({ direction, id, coordinate: { ii: ii, jj: jj } });
+      if (res.res) {
         commands.push(res.command);
         blocks.push(res.block);
         ii = res.coordinate.ii;
@@ -186,10 +202,23 @@ function parsingMovement(code) {
         break;
       }
     } else if (line[1] === 'turnRight' || line[1] === 'turnLeft') {
-      const res = turn(direction, line[1], line[0]);
+      const res = turn({ direction, command: line[1], id: line[0] });
       commands.push(res.command);
       blocks.push(res.block);
       direction = res.direction;
+    } else if (line[1] === 'collect') {
+      const res = collect({ id: line[0], coordinate: { ii: ii, jj: jj } });
+      if (res.res) {
+        let { cntGems } = store.getState().blocks;
+        store.dispatch({
+          type: 'COLLECT_GEMS',
+          payload: {
+            cntGems: cntGems + 1
+          }
+        });
+        commands.push(res.command);
+        blocks.push(res.block);
+      }
     } else if (line[1] === 'for') {
       if (line[2] === 'INFINITY') {
         counts[line[0]] = { count: 100, begin: i };
@@ -203,8 +232,8 @@ function parsingMovement(code) {
       }
     }
   }
-
-  if (tiles[ii][jj] & FINAL) {
+  let { cntGems, maxGems } = store.getState().blocks;
+  if (tiles[ii][jj] & FINAL && cntGems === maxGems) {
     commands.push('FINISH');
     blocks.push(null);
     return { commands, blocks, res: 'SUCCESS' };

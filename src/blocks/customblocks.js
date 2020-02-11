@@ -74,7 +74,7 @@ Blockly.Blocks['while_inf'] = {
       .setCheck(null)
       .appendField('ทำ');
     this.setPreviousStatement(true, null);
-    this.setColour(135);
+    this.setColour(120);
     this.setTooltip('for inf');
     this.setHelpUrl(
       'https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#hq4zhn'
@@ -139,6 +139,20 @@ Blockly.Blocks['turn_left'] = {
     this.setTooltip('');
     this.setHelpUrl(
       'https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#y2b6c5'
+    );
+  }
+};
+
+// collect
+Blockly.Blocks['collect'] = {
+  init: function() {
+    this.appendDummyInput().appendField('เก็บของ');
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(240);
+    this.setTooltip('');
+    this.setHelpUrl(
+      'https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#odz7qx'
     );
   }
 };

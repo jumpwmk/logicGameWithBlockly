@@ -6,7 +6,7 @@ const initialState = {
 
 const blocksReducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'CHANGE_MAX_BLOCKS':
+    case 'INIT_BLOCKS':
       return {
         ...state,
         ...action.payload
@@ -17,6 +17,11 @@ const blocksReducer = (state = initialState, action) => {
         ...action.payload
       };
     case 'CHANGE_STATE':
+      return {
+        ...state,
+        ...action.payload
+      };
+    case 'COLLECT_GEMS':
       return {
         ...state,
         ...action.payload

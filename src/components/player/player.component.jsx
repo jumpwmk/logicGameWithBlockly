@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import handleMovement from './movement';
+import handleMovement from '../../utils/movement';
 
 import { placePlayer } from '../../utils/generateMap';
 

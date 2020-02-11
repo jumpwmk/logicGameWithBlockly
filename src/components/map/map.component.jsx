@@ -4,8 +4,11 @@ import { connect } from 'react-redux';
 import {
   placePlatformTile,
   placeWall,
-  placeEndPortal
+  placeEndPortal,
+  placeFloatingObj
 } from '../../utils/generateMap';
+
+import { MAP_W, MAP_H } from '../../config/constants';
 
 import './map.styles.scss';
 
@@ -17,7 +20,7 @@ function MapTile(props) {
   );
   return (
     <div
-      id={props.index_i * 12 + props.index_j}
+      id={props.index_i * MAP_W + props.index_j}
       style={{
         position: 'absolute',
         top: tile.top,
@@ -37,7 +40,7 @@ function MapWall(props) {
     <React.Fragment>
       {props.wall.yf !== undefined ? (
         <div
-          id={props.index_i * 12 + props.index_j}
+          id={props.index_i * MAP_W + props.index_j}
           style={{
             position: 'absolute',
             top: wall.top,
@@ -50,7 +53,7 @@ function MapWall(props) {
       ) : null}
       {props.wall.yb !== undefined ? (
         <div
-          id={props.index_i * 12 + props.index_j}
+          id={props.index_i * MAP_W + props.index_j}
           style={{
             position: 'absolute',
             top: wall.top,
@@ -63,7 +66,7 @@ function MapWall(props) {
       ) : null}
       {props.wall.xf !== undefined ? (
         <div
-          id={props.index_i * 12 + props.index_j}
+          id={props.index_i * MAP_W + props.index_j}
           style={{
             position: 'absolute',
             top: wall.top,
@@ -76,7 +79,7 @@ function MapWall(props) {
       ) : null}
       {props.wall.xb !== undefined ? (
         <div
-          id={props.index_i * 12 + props.index_j}
+          id={props.index_i * MAP_W + props.index_j}
           style={{
             position: 'absolute',
             top: wall.top,
@@ -91,11 +94,36 @@ function MapWall(props) {
   );
 }
 
+function MapFloatingObj(props) {
+  if (!props.obj) return null;
+  if (!props.obj.visible) return null;
+  const { className, ...obj } = placeFloatingObj(
+    props.index_i,
+    props.index_j,
+    props.obj.objtype,
+    props.obj.objvari,
+    props.position
+  );
+  return (
+    <div
+      id={props.index_i * MAP_W + props.index_j}
+      style={{
+        position: 'absolute',
+        top: obj.top,
+        left: obj.left,
+        width: obj.width,
+        height: obj.height
+      }}
+      className={className}
+    />
+  );
+}
+
 function MapEndPortal({ x, y }) {
   const { className, ...tile } = placeEndPortal(x, y);
   return (
     <div
-      id={x * 12 + y}
+      id={x * MAP_W + y}
       style={{
         position: 'absolute',
         top: tile.top,
@@ -109,8 +137,7 @@ function MapEndPortal({ x, y }) {
 }
 
 function Map(props) {
-  const { map } = props;
-  console.log(map.tiles.platform);
+  const { map, player } = props;
 
   return (
     <div className='map'>
@@ -124,13 +151,23 @@ function Map(props) {
           <MapWall wall={wall} index_i={index_i} index_j={index_j} />
         ))
       )}
+      {map.floatingobj.map((row, index_i) =>
+        row.map((obj, index_j) => (
+          <MapFloatingObj
+            obj={obj}
+            index_i={index_i}
+            index_j={index_j}
+            position={player.position}
+          />
+        ))
+      )}
       {MapEndPortal(map.end)}
     </div>
   );
 }
 
-const mapStateToProps = ({ map }) => {
-  return { map };
+const mapStateToProps = ({ map, player }) => {
+  return { map, player };
 };
 
 export default connect(mapStateToProps)(Map);

@@ -30,19 +30,25 @@ import 'blockly/javascript';
 Blockly.JavaScript['go_ahead'] = function(block) {
   // TODO: Assemble JavaScript into code letiable.
   console.log(block);
-  let code = block.id + ' moveForward' + '\n';
+  let code = block.id + ' moveForward\n';
   return code;
 };
 
 Blockly.JavaScript['turn_right'] = function(block) {
   // TODO: Assemble JavaScript into code letiable.
-  let code = block.id + ' turnRight' + '\n';
+  let code = block.id + ' turnRight\n';
   return code;
 };
 
 Blockly.JavaScript['turn_left'] = function(block) {
   // TODO: Assemble JavaScript into code letiable.
-  let code = block.id + ' turnLeft' + '\n';
+  let code = block.id + ' turnLeft\n';
+  return code;
+};
+
+Blockly.JavaScript['collect'] = function(block) {
+  // TODO: Assemble JavaScript into code variable.
+  let code = block.id + ' collect\n';
   return code;
 };
 

@@ -1,5 +1,5 @@
-import { store } from '../../redux/store';
-import { MAP_W, MAP_H } from '../../config/constants';
+import { store } from '../redux/store';
+import { MAP_W, MAP_H } from '../config/constants';
 
 export function attemptMove(nxtMove) {
   console.log(nxtMove);
@@ -19,6 +19,16 @@ export function attemptMove(nxtMove) {
   ) {
     dispatchMove(direction, newPos);
   }
+}
+
+export function attemptCollect() {
+  const pos = store.getState().player.position;
+  const { floatingobj } = store.getState().map;
+  if (!floatingobj[pos[0]][pos[1]] || !floatingobj[pos[0]][pos[1]].visible) {
+    return;
+  }
+  floatingobj[pos[0]][pos[1]].visible = false;
+  dispatchMap(floatingobj);
 }
 
 function getNewPosition(direction, nxtMove) {
@@ -86,6 +96,15 @@ function dispatchMove(direction, newPos) {
     payload: {
       position: newPos,
       facing: direction
+    }
+  });
+}
+
+function dispatchMap(floatingobj) {
+  store.dispatch({
+    type: 'CHANGE_FLOATING_OBJ',
+    payload: {
+      floatingobj: floatingobj
     }
   });
 }
