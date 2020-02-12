@@ -107,6 +107,13 @@ function dispatchMap(floatingobj) {
       floatingobj: floatingobj
     }
   });
+  let { cntGems } = store.getState().blocks;
+  store.dispatch({
+    type: 'COLLECT_GEMS',
+    payload: {
+      cntGems: cntGems + 1
+    }
+  });
 }
 
 function observeBoundaries(newPos) {

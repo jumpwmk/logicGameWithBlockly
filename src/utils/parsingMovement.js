@@ -178,6 +178,7 @@ function parsingMovement(code) {
   let blocks = [];
 
   let ticks = 400; // set time out
+  let { cntGems, maxGems } = store.getState().blocks;
 
   for (let i = 0; i < lines.length - 1; i++) {
     ticks--;
@@ -209,13 +210,7 @@ function parsingMovement(code) {
     } else if (line[1] === 'collect') {
       const res = collect({ id: line[0], coordinate: { ii: ii, jj: jj } });
       if (res.res) {
-        let { cntGems } = store.getState().blocks;
-        store.dispatch({
-          type: 'COLLECT_GEMS',
-          payload: {
-            cntGems: cntGems + 1
-          }
-        });
+        cntGems++;
         commands.push(res.command);
         blocks.push(res.block);
       }
@@ -232,7 +227,6 @@ function parsingMovement(code) {
       }
     }
   }
-  let { cntGems, maxGems } = store.getState().blocks;
   if (tiles[ii][jj] & FINAL && cntGems === maxGems) {
     commands.push('FINISH');
     blocks.push(null);

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import Map from '../map/map.component';
 import Player from '../player/player.component';
-import MaxBlocks from '../max-blocks/max-blocks.component';
+import Goal from '../goal/goal.component';
 
 import { tiles } from '../../config/tiles';
 import { store } from '../../redux/store';
@@ -22,7 +22,7 @@ function World(props) {
     <div className='world'>
       <Map />
       <Player />
-      <MaxBlocks />
+      <Goal />
     </div>
   );
 }
