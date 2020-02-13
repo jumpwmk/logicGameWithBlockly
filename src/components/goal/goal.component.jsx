@@ -28,7 +28,11 @@ function Gems(props) {
 function MaxBlocks(props) {
   const { blocks } = props;
   if (true) {
-    return <div className='text complete'>0 / {blocks.maxBlocks} คำสั่ง</div>;
+    return (
+      <div className='text complete'>
+        {blocks.cntBlocks} / {blocks.maxBlocks} คำสั่ง
+      </div>
+    );
   } else {
     return <div className='text'>0 / {blocks.maxBlocks} คำสั่ง</div>;
   }

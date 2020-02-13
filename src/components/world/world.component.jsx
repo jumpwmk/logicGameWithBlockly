@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Map from '../map/map.component';
 import Player from '../player/player.component';
 import Goal from '../goal/goal.component';
+import Level from '../level/level.component';
 
 import { tiles } from '../../config/tiles';
 import { store } from '../../redux/store';
@@ -23,6 +24,7 @@ function World(props) {
       <Map />
       <Player />
       <Goal />
+      <Level />
     </div>
   );
 }

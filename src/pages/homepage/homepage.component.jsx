@@ -23,6 +23,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import Blockly from 'blockly/core';
 
 import BlocklyComponent, { Block } from '../../Blockly';
 
@@ -45,6 +46,18 @@ import { MAP_W, MAP_H } from '../../config/constants';
 import './homepage.styles.scss';
 
 class Homepage extends React.Component {
+  componentDidMount() {
+    this.simpleWorkspace.workspace.addChangeListener(e => {
+      // this.simpleWorkspace.workspace.options.setDisable(true);
+      const { blocks } = this.props;
+      // console.log(blocks);
+      let remainBlocks = this.simpleWorkspace.workspace.remainingCapacity();
+      store.dispatch({
+        type: 'CHANGE_CNT_BLOCKS',
+        payload: { cntBlocks: 1000 - remainBlocks }
+      });
+    });
+  }
   changeMap = () => {
     let code = BlocklyJS.workspaceToCode(this.simpleWorkspace.workspace);
     saveLog({ code, type: 'change map' });
@@ -57,8 +70,10 @@ class Homepage extends React.Component {
       type: 'CHANGE_STATE',
       payload: { state: false }
     });
+    console.log('testtest');
+    console.log(this.simpleWorkspace.workspace.remainingCapacity());
     const res = await animate(code, this.simpleWorkspace.workspace);
-    console.log(store.getState().blocks);
+    // console.log(store.getState().blocks);
     saveLog({ code, type: 'run', res });
     if (res === 'SUCCESS') {
       store.dispatch({

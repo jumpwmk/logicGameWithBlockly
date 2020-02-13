@@ -11,6 +11,11 @@ const blocksReducer = (state = initialState, action) => {
         ...state,
         ...action.payload
       };
+    case 'CHANGE_CNT_BLOCKS':
+      return {
+        ...state,
+        ...action.payload
+      };
     case 'CHANGE_WORKSPACE':
       return {
         ...state,
@@ -22,6 +27,11 @@ const blocksReducer = (state = initialState, action) => {
         ...action.payload
       };
     case 'COLLECT_GEMS':
+      return {
+        ...state,
+        ...action.payload
+      };
+    case 'INIT_BLOCKLY_DIV':
       return {
         ...state,
         ...action.payload

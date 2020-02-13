@@ -35,6 +35,10 @@ Blockly.setLocale(locale);
 class BlocklyComponent extends React.Component {
   componentDidMount() {
     const { initialXml, children, ...rest } = this.props;
+    store.dispatch({
+      type: 'INIT_BLOCKLY_DIV',
+      payload: { blocklyDiv: this.blocklyDiv }
+    });
     this.primaryWorkspace = Blockly.inject(this.blocklyDiv, {
       toolbox: this.toolbox,
       ...rest
