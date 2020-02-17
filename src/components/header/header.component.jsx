@@ -18,7 +18,7 @@ const Header = props => {
 
   return (
     <div className='header'>
-      <Link to='/'>
+      <Link to='/home'>
         <Logo className='logo-container' />
       </Link>
       <div className='options'>
@@ -27,7 +27,7 @@ const Header = props => {
             SIGN OUT
           </div>
         ) : (
-          <Link className='option' to='/signin'>
+          <Link className='option' to='/'>
             SIGN IN
           </Link>
         )}

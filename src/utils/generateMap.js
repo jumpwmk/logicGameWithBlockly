@@ -30,6 +30,20 @@ export function placePlatformTile(x, y) {
   return tile;
 }
 
+export function placePlatformTileOverlay(x, y) {
+  const img = 'tileoverlay-2';
+  const pos = calcTilePos(x, y);
+  let tile = {
+    top: pos.top + 'px',
+    left: pos.left + 'px',
+    width: TILE_W + 'px',
+    height: TILE_H + 'px',
+    position: 'absolute',
+    className: img
+  };
+  return tile;
+}
+
 export function placeWall(x, y) {
   let pos = calcTilePos(x, y);
   let top = pos.top - (PLATFORM_WALL_H - TILE_H) + 'px';

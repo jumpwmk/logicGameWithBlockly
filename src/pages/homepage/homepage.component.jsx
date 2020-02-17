@@ -23,16 +23,16 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import Blockly from 'blockly/core';
 
-import BlocklyComponent, { Block } from '../../Blockly';
+import BlocklyComponent, { Block } from '../../components/blockly';
 
 import BlocklyJS from 'blockly/javascript';
 
-import '../../blocks/customblocks';
-import '../../generator/generator';
+import '../../components/custom-blocks/custom-blocks';
+import '../../components/custom-blocks/generator';
 
 import World from '../../components/world/world.component';
+// import BlocklyWorkspace from '../../components/blockly-workspace/blockly-workspace.component';
 import { ReactComponent as Play } from '../../images/play.svg';
 import { ReactComponent as Reset } from '../../images/reset.svg';
 
@@ -48,18 +48,22 @@ import './homepage.styles.scss';
 class Homepage extends React.Component {
   componentDidMount() {
     this.simpleWorkspace.workspace.addChangeListener(e => {
-      // this.simpleWorkspace.workspace.options.setDisable(true);
       const { blocks } = this.props;
-      // console.log(blocks);
       let remainBlocks = this.simpleWorkspace.workspace.remainingCapacity();
       store.dispatch({
         type: 'CHANGE_CNT_BLOCKS',
-        payload: { cntBlocks: 1000 - remainBlocks }
+        payload: { cntBlocks: blocks.maxBlocks - remainBlocks }
+      });
+      store.dispatch({
+        type: 'CHANGE_WORKSPACE',
+        payload: { workspace: this.simpleWorkspace.workspace }
       });
     });
   }
+
   changeMap = () => {
     let code = BlocklyJS.workspaceToCode(this.simpleWorkspace.workspace);
+    this.simpleWorkspace.workspace.clear();
     saveLog({ code, type: 'change map' });
     fetchData();
   };

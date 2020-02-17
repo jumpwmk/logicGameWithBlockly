@@ -6,6 +6,7 @@ import { store } from '../../redux/store';
 import { fetchData } from '../../utils/fetchData';
 
 import './congrats.styles.scss';
+import blocksReducer from '../../redux/blocks-reducer';
 
 Modal.setAppElement(document.getElementById('root'));
 
@@ -35,13 +36,16 @@ class Congrats extends React.Component {
     });
   }
 
-  changeMap() {
+  changeMap = () => {
+    console.log(this.props.blocks);
+    const { blocks } = this.props;
     store.dispatch({
       type: 'CHANGE_CONFIG_MODAL',
       payload: { modalIsOpen: false }
     });
+    blocks.workspace.clear();
     fetchData();
-  }
+  };
 
   render() {
     const { congrats } = this.props;
@@ -69,8 +73,8 @@ class Congrats extends React.Component {
   }
 }
 
-const mapStateToProps = ({ congrats }) => {
-  return { congrats };
+const mapStateToProps = ({ congrats, blocks }) => {
+  return { congrats, blocks };
 };
 
 export default connect(mapStateToProps)(Congrats);

@@ -5,7 +5,8 @@ import {
   placePlatformTile,
   placeWall,
   placeEndPortal,
-  placeFloatingObj
+  placeFloatingObj,
+  placePlatformTileOverlay
 } from '../../utils/generateMap';
 
 import { MAP_W, MAP_H } from '../../config/constants';
@@ -15,6 +16,27 @@ import './map.styles.scss';
 function MapTile(props) {
   if (!props.tile) return null;
   const { className, ...tile } = placePlatformTile(
+    props.index_i,
+    props.index_j
+  );
+  return (
+    <div
+      id={props.index_i * MAP_W + props.index_j}
+      style={{
+        position: 'absolute',
+        top: tile.top,
+        left: tile.left,
+        width: tile.width,
+        height: tile.height
+      }}
+      className={className}
+    />
+  );
+}
+
+function MapTileOverlay(props) {
+  if (!props.tile) return null;
+  const { className, ...tile } = placePlatformTileOverlay(
     props.index_i,
     props.index_j
   );
@@ -144,6 +166,11 @@ function Map(props) {
       {map.platform.map((row, index_i) =>
         row.map((tile, index_j) => (
           <MapTile tile={tile} index_i={index_i} index_j={index_j} />
+        ))
+      )}
+      {map.tileoverlay.map((row, index_i) =>
+        row.map((tile, index_j) => (
+          <MapTileOverlay tile={tile} index_i={index_i} index_j={index_j} />
         ))
       )}
       {map.wall.map((row, index_i) =>

@@ -22,9 +22,10 @@
  */
 
 import React from 'react';
+
 import './BlocklyComponent.css';
 
-import { store } from '../redux/store';
+import { store } from '../../redux/store';
 
 import Blockly from 'blockly/core';
 import locale from 'blockly/msg/th';
@@ -34,22 +35,49 @@ Blockly.setLocale(locale);
 
 class BlocklyComponent extends React.Component {
   componentDidMount() {
-    const { initialXml, children, ...rest } = this.props;
-    store.dispatch({
-      type: 'INIT_BLOCKLY_DIV',
-      payload: { blocklyDiv: this.blocklyDiv }
-    });
+    const { children, ...rest } = this.props;
     this.primaryWorkspace = Blockly.inject(this.blocklyDiv, {
       toolbox: this.toolbox,
       ...rest
     });
 
-    if (initialXml) {
-      Blockly.Xml.domToWorkspace(
-        Blockly.Xml.textToDom(initialXml),
-        this.primaryWorkspace
-      );
+    store.dispatch({
+      type: 'CHANGE_WORKSPACE',
+      payload: { workspace: this.primaryWorkspace }
+    });
+  }
+
+  componentDidUpdate() {
+    const { children, ...rest } = this.props;
+
+    this.primaryWorkspace.dispose();
+
+    this.primaryWorkspace = Blockly.inject(this.blocklyDiv, {
+      toolbox: this.toolbox,
+      ...rest
+    });
+
+    this.primaryWorkspace.addChangeListener(e => {
+      const { maxBlocks } = this.props;
+      let remainBlocks = this.primaryWorkspace.remainingCapacity();
+
+      store.dispatch({
+        type: 'CHANGE_CNT_BLOCKS',
+        payload: { cntBlocks: maxBlocks - remainBlocks }
+      });
+    });
+
+    store.dispatch({
+      type: 'CHANGE_WORKSPACE',
+      payload: { workspace: this.primaryWorkspace }
+    });
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.props.maxBlocks) {
+      return nextProps.maxBlocks !== this.props.maxBlocks;
     }
+    return false;
   }
 
   get workspace() {
@@ -64,7 +92,7 @@ class BlocklyComponent extends React.Component {
   }
 
   render() {
-    const { children, blocks } = this.props;
+    const { children } = this.props;
 
     return (
       <React.Fragment>

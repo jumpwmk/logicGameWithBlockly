@@ -156,3 +156,27 @@ Blockly.Blocks['collect'] = {
     );
   }
 };
+
+// if
+Blockly.Blocks['if'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('ถ้าอยู่บนแผ่น')
+      .appendField(
+        new Blockly.FieldDropdown([
+          ['สีเขียว', 'green'],
+          ['สีเหลือง', 'yellow'],
+          ['สีดำ', 'black']
+        ]),
+        'color'
+      );
+    this.appendStatementInput('commands').setCheck(null);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(300);
+    this.setTooltip('');
+    this.setHelpUrl(
+      'https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#89if4f'
+    );
+  }
+};

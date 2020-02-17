@@ -72,8 +72,8 @@ class App extends React.Component {
       <div className='App'>
         <Header />
         <Switch>
-          <Route exact path='/' component={HomePage} />
-          <Route exact path='/signin' component={SignInSignUp} />
+          <Route exact path='/home' component={HomePage} />
+          <Route exact path='/' component={SignInSignUp} />
         </Switch>
       </div>
     );

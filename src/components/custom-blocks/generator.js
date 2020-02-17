@@ -96,3 +96,21 @@ Blockly.JavaScript['while_inf'] = function(block) {
     ' end\n';
   return code;
 };
+
+Blockly.JavaScript['if'] = function(block) {
+  var dropdown_color = block.getFieldValue('color');
+  var statements_commands = Blockly.JavaScript.statementToCode(
+    block,
+    'commands'
+  );
+  // TODO: Assemble JavaScript into code variable.
+  var code =
+    block.id +
+    ' if ' +
+    dropdown_color +
+    ' begin\n' +
+    statements_commands +
+    block.id +
+    ' end\n';
+  return code;
+};
