@@ -36,10 +36,11 @@ function MapTile(props) {
 
 function MapTileOverlay(props) {
   if (!props.tile) return null;
-  const { className, ...tile } = placePlatformTileOverlay(
-    props.index_i,
-    props.index_j
-  );
+  const { className, ...tile } = placePlatformTileOverlay({
+    x: props.index_i,
+    y: props.index_j,
+    type: props.tile.overlaytype
+  });
   return (
     <div
       id={props.index_i * MAP_W + props.index_j}

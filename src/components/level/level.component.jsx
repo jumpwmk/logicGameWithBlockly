@@ -4,16 +4,19 @@ import { connect } from 'react-redux';
 import './level.styles.scss';
 
 function Level(props) {
-  const { blocks } = props;
+  const { user } = props;
+  console.log(user);
   return (
     <div className='level'>
-      <div className='text'>Level 2</div>
+      <div className='text'>
+        Level {user.currentUser ? user.currentUser.level : null}
+      </div>
     </div>
   );
 }
 
-const mapStateToProps = ({ blocks }) => {
-  return { blocks };
+const mapStateToProps = ({ user }) => {
+  return { user };
 };
 
 export default connect(mapStateToProps)(Level);

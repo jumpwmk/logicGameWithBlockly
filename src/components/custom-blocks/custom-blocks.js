@@ -157,11 +157,11 @@ Blockly.Blocks['collect'] = {
   }
 };
 
-// if
-Blockly.Blocks['if'] = {
+// if_tile
+Blockly.Blocks['if_tile'] = {
   init: function() {
     this.appendDummyInput()
-      .appendField('ถ้าอยู่บนแผ่น')
+      .appendField('กรณีอยู่บนแผ่น')
       .appendField(
         new Blockly.FieldDropdown([
           ['สีเขียว', 'green'],
@@ -170,7 +170,7 @@ Blockly.Blocks['if'] = {
         ]),
         'color'
       );
-    this.appendStatementInput('commands').setCheck(null);
+    this.appendStatementInput('if_commands').setCheck(null);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(300);
@@ -178,5 +178,81 @@ Blockly.Blocks['if'] = {
     this.setHelpUrl(
       'https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#89if4f'
     );
+  }
+};
+
+// if_else_tile
+Blockly.Blocks['if_else_tile'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('กรณีอยู่บนแผ่น')
+      .appendField(
+        new Blockly.FieldDropdown([
+          ['สีเขียว', 'green'],
+          ['สีเหลือง', 'yellow'],
+          ['สีดำ', 'black']
+        ]),
+        'color'
+      );
+    this.appendStatementInput('if_commands').setCheck(null);
+    this.appendDummyInput().appendField('กรณีอื่น ๆ');
+    this.appendStatementInput('else_commands').setCheck(null);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(300);
+    this.setTooltip(
+      'https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#3urwxk'
+    );
+    this.setHelpUrl('');
+  }
+};
+
+//if_path
+Blockly.Blocks['if_path'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('กรณีมีทางไป')
+      .appendField(
+        new Blockly.FieldDropdown([
+          ['ทางซ้าย', 'left'],
+          ['ทางขวา', 'right'],
+          ['ข้างหน้า', 'ahead']
+        ]),
+        'path'
+      );
+    this.appendStatementInput('if_commands').setCheck(null);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(300);
+    this.setTooltip(
+      'https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#6eibf3'
+    );
+    this.setHelpUrl('');
+  }
+};
+
+// if_else_path
+Blockly.Blocks['if_else_path'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('กรณีมีทางไป')
+      .appendField(
+        new Blockly.FieldDropdown([
+          ['ทางซ้าย', 'left'],
+          ['ทางขวา', 'right'],
+          ['ข้างหน้า', 'ahead']
+        ]),
+        'path'
+      );
+    this.appendStatementInput('if_commands').setCheck(null);
+    this.appendDummyInput().appendField('กรณีอื่น ๆ');
+    this.appendStatementInput('else_commands').setCheck(null);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(300);
+    this.setTooltip(
+      'https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#23sb82'
+    );
+    this.setHelpUrl('');
   }
 };

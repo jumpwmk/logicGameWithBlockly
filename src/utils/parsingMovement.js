@@ -89,6 +89,8 @@ function turn(obj) {
   let { direction, command, id } = obj;
   let COMMANDS = { turnLeft: 'TURN_LEFT', turnRight: 'TURN_RIGHT' };
 
+  console.log(obj);
+
   let DIRECTION_LEFT = {
     xb: 'yb',
     yf: 'xb',
@@ -113,9 +115,9 @@ function turn(obj) {
 
 function collect(obj) {
   let { id, coordinate } = obj;
-  const floatingobj = store.getState().map.floatingobj;
+  const { floatingobj } = store.getState().map;
   let { ii, jj } = coordinate;
-  console.log(floatingobj);
+
   if (floatingobj[ii][jj] !== null && floatingobj[ii][jj].visible) {
     return {
       command: 'COLLECT',
@@ -125,7 +127,34 @@ function collect(obj) {
   }
 }
 
-function isPath(direction, command, id, coordinate) {
+function isOnTile(obj) {
+  let { condition, id, coordinate } = obj;
+  const { tileoverlay } = store.getState().map;
+
+  let { ii, jj } = coordinate;
+
+  const OVERLAY_TYPE = { 1: 'green', 2: 'black', 3: 'yellow' };
+
+  if (tileoverlay[ii][jj]) {
+    console.log('tileoverlay');
+    console.log(tileoverlay[ii][jj].overlaytype, condition, OVERLAY_TYPE);
+  }
+
+  if (tileoverlay[ii][jj] !== null) {
+    if (OVERLAY_TYPE[tileoverlay[ii][jj].overlaytype] === condition)
+      return {
+        block: id,
+        res: true
+      };
+  }
+  return {
+    block: id,
+    res: false
+  };
+}
+
+function isPath(obj) {
+  let { condition, direction, id, coordinate } = obj;
   const tiles = store.getState().map.tiles;
 
   let { ii, jj } = coordinate;
@@ -151,23 +180,29 @@ function isPath(direction, command, id, coordinate) {
     yb: 'xb'
   };
 
-  if (command === 'right') {
+  if (condition === 'right') {
     direction = DIRECTION_RIGHT[direction];
-  } else if (command === 'left') {
+  } else if (condition === 'left') {
     direction = DIRECTION_LEFT[direction];
   }
 
   if (tiles[ii][jj] & DIRECTION[direction]) {
+    console.log('look failed!');
     return { command: DIRECTION_LOOK[direction], block: id, res: false };
+  } else {
+    console.log('look success!');
+    return { command: DIRECTION_LOOK[direction], block: id, res: true };
   }
-  return { command: DIRECTION_LOOK[direction], block: id, res: true };
 }
 
 function parsingMovement(code) {
-  let counts = {};
+  let COUNTS = {};
 
   const tiles = store.getState().map.tiles;
 
+  let tmp_condition = [];
+  let condition_id = null;
+  let condition_res = false;
   let lines = code.split('\n');
   let direction = store.getState().player.facing;
   let pos = store.getState().player.position;
@@ -179,6 +214,7 @@ function parsingMovement(code) {
 
   let ticks = 400; // set time out
   let { cntGems, maxGems } = store.getState().blocks;
+  console.log('start running code here');
 
   for (let i = 0; i < lines.length - 1; i++) {
     ticks--;
@@ -190,40 +226,109 @@ function parsingMovement(code) {
     if (tiles[ii][jj] & FINAL) {
       break;
     }
-    if (line[1] === 'moveForward') {
-      const res = move({ direction, id, coordinate: { ii: ii, jj: jj } });
-      if (res.res) {
-        commands.push(res.command);
-        blocks.push(res.block);
-        ii = res.coordinate.ii;
-        jj = res.coordinate.jj;
-      } else {
-        commands.push(res.command);
-        blocks.push(res.block);
-        break;
+    // console.log(line[0], line[1]);
+    if (line[1] === 'end') {
+      if (COUNTS[line[0]]) {
+        if (COUNTS[line[0]].type === 'loop') {
+          COUNTS[line[0]].count--;
+          if (COUNTS[line[0]].count > 0) {
+            i = COUNTS[line[0]].begin;
+          }
+        } else if (COUNTS[line[0]].type === 'if') {
+          const res = tmp_condition.pop();
+          if (tmp_condition.length === 0) {
+            condition_id = null;
+            condition_res = false;
+          } else {
+            const tmp = tmp_condition.pop();
+            condition_id = tmp.condition_id;
+            condition_res = tmp.condition_res;
+          }
+        }
       }
-    } else if (line[1] === 'turnRight' || line[1] === 'turnLeft') {
-      const res = turn({ direction, command: line[1], id: line[0] });
+    } else if (line[1] === 'else' && COUNTS[line[0]].res === false) {
+      condition_res = true;
+      condition_id = line[0];
+      tmp_condition.push({ condition_id, condition_res });
+    } else if (condition_id && condition_res === false) {
+      continue;
+    } else if (line[1] === 'if_tile') {
+      // console.log('if_tile');
+      // console.log(line[1], line[2]);
+      const res = isOnTile({
+        condition: line[2],
+        id: line[0],
+        coordinate: { ii: ii, jj: jj }
+      });
+      console.log(res);
+      if (res.res) {
+        condition_id = res.block;
+        condition_res = true;
+        COUNTS[line[0]] = { res: true, type: 'if' };
+      } else {
+        condition_id = res.block;
+        condition_res = false;
+        COUNTS[line[0]] = { res: false, type: 'if' };
+      }
+      tmp_condition.push({ condition_id, condition_res });
+    } else if (line[1] === 'if_path') {
+      const res = isPath({
+        condition: line[2],
+        id: line[0],
+        coordinate: { ii: ii, jj: jj },
+        direction: direction
+      });
+      console.log(res);
+      if (res.res) {
+        condition_id = res.block;
+        condition_res = true;
+        COUNTS[line[0]] = { res: true, type: 'if' };
+      } else {
+        condition_id = res.block;
+        condition_res = false;
+        COUNTS[line[0]] = { res: false, type: 'if' };
+      }
+      tmp_condition.push({ condition_id, condition_res });
       commands.push(res.command);
       blocks.push(res.block);
-      direction = res.direction;
-    } else if (line[1] === 'collect') {
-      const res = collect({ id: line[0], coordinate: { ii: ii, jj: jj } });
-      if (res.res) {
-        cntGems++;
+    } else if (line[1] === 'else_if') {
+      /// not done yet
+    } else if (condition_id === null || condition_res) {
+      if (line[1] === 'moveForward') {
+        const res = move({ direction, id, coordinate: { ii: ii, jj: jj } });
+        if (res.res) {
+          commands.push(res.command);
+          blocks.push(res.block);
+          ii = res.coordinate.ii;
+          jj = res.coordinate.jj;
+        } else {
+          commands.push(res.command);
+          blocks.push(res.block);
+          break;
+        }
+      } else if (line[1] === 'turnRight' || line[1] === 'turnLeft') {
+        console.log(line[0], line[1]);
+        const res = turn({ direction, command: line[1], id: line[0] });
         commands.push(res.command);
         blocks.push(res.block);
-      }
-    } else if (line[1] === 'for') {
-      if (line[2] === 'INFINITY') {
-        counts[line[0]] = { count: 100, begin: i };
-      } else {
-        counts[line[0]] = { count: parseInt(line[2]), begin: i };
-      }
-    } else if (line[1] === 'end') {
-      counts[line[0]].count--;
-      if (counts[line[0]].count > 0) {
-        i = counts[line[0]].begin;
+        direction = res.direction;
+      } else if (line[1] === 'collect') {
+        const res = collect({ id: line[0], coordinate: { ii: ii, jj: jj } });
+        if (res.res) {
+          cntGems++;
+          commands.push(res.command);
+          blocks.push(res.block);
+        }
+      } else if (line[1] === 'for') {
+        if (line[2] === 'INFINITY') {
+          COUNTS[line[0]] = { count: 100, begin: i, type: 'loop' };
+        } else {
+          COUNTS[line[0]] = {
+            count: parseInt(line[2]),
+            begin: i,
+            type: 'loop'
+          };
+        }
       }
     }
   }

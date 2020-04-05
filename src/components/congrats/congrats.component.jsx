@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import { store } from '../../redux/store';
 import { fetchData } from '../../utils/fetchData';
+import { updateUser } from '../../utils/updateUser';
 
 import './congrats.styles.scss';
 import blocksReducer from '../../redux/blocks-reducer';
@@ -38,11 +39,22 @@ class Congrats extends React.Component {
 
   changeMap = () => {
     console.log(this.props.blocks);
-    const { blocks } = this.props;
+    const { user, blocks } = this.props;
+
     store.dispatch({
       type: 'CHANGE_CONFIG_MODAL',
       payload: { modalIsOpen: false }
     });
+
+    user.currentUser.level = user.currentUser.level + 1;
+
+    store.dispatch({
+      type: 'SET_CURRENT_USER',
+      payload: { ...user.currentUser }
+    });
+
+    updateUser({ user: user.currentUser });
+
     blocks.workspace.clear();
     fetchData();
   };
@@ -73,8 +85,8 @@ class Congrats extends React.Component {
   }
 }
 
-const mapStateToProps = ({ congrats, blocks }) => {
-  return { congrats, blocks };
+const mapStateToProps = ({ congrats, blocks, user }) => {
+  return { congrats, blocks, user };
 };
 
 export default connect(mapStateToProps)(Congrats);

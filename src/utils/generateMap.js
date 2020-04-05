@@ -30,8 +30,9 @@ export function placePlatformTile(x, y) {
   return tile;
 }
 
-export function placePlatformTileOverlay(x, y) {
-  const img = 'tileoverlay-2';
+export function placePlatformTileOverlay(obj) {
+  const { x, y, type } = obj;
+  const img = 'tileoverlay-' + type;
   const pos = calcTilePos(x, y);
   let tile = {
     top: pos.top + 'px',

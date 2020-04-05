@@ -5,8 +5,17 @@ import { store } from '../redux/store';
 
 export async function fetchData() {
   const path = '/maps/get-map';
-  const data = {};
-  console.log(withBackendUrl(path));
+  let data;
+  if (
+    store.getState().user &&
+    store.getState().user.currentUser &&
+    store.getState().user.currentUser.level
+  ) {
+    data = { level: store.getState().user.currentUser.level };
+  } else {
+    data = { level: 1 };
+  }
+  // console.log(withBackendUrl(path));
   await axios
     .post(withBackendUrl(path), data)
     .then(response => {

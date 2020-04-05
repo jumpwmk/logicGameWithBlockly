@@ -21,7 +21,7 @@
  * @author samelh@google.com (Sam El-Husseini)
  */
 
-import React from './node_modules/react';
+import React from 'react';
 import BlocklyComponent from './blocklyComponent';
 
 export default BlocklyComponent;

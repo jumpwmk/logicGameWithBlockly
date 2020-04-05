@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import './BlocklyComponent.css';
+import './blocklyComponent.css';
 
 import { store } from '../../redux/store';
 

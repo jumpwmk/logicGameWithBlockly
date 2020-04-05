@@ -77,7 +77,6 @@ class Homepage extends React.Component {
     console.log('testtest');
     console.log(this.simpleWorkspace.workspace.remainingCapacity());
     const res = await animate(code, this.simpleWorkspace.workspace);
-    // console.log(store.getState().blocks);
     saveLog({ code, type: 'run', res });
     if (res === 'SUCCESS') {
       store.dispatch({
@@ -179,6 +178,10 @@ class Homepage extends React.Component {
               <Block type='collect' />
               <Block type='for' />
               <Block type='while_inf' />
+              <Block type='if_tile' />
+              <Block type='if_else_tile' />
+              <Block type='if_path' />
+              <Block type='if_else_path' />
             </BlocklyComponent>
           </div>
         </div>

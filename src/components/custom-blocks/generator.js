@@ -88,7 +88,7 @@ Blockly.JavaScript['while_inf'] = function(block) {
   // TODO: Assemble JavaScript into code variable.
   let code =
     block.id +
-    ' for 1000 ' +
+    ' for 1000\n' +
     block.id +
     ' begin\n' +
     statements_inner_loop +
@@ -97,19 +97,95 @@ Blockly.JavaScript['while_inf'] = function(block) {
   return code;
 };
 
-Blockly.JavaScript['if'] = function(block) {
+Blockly.JavaScript['if_tile'] = function(block) {
   var dropdown_color = block.getFieldValue('color');
   var statements_commands = Blockly.JavaScript.statementToCode(
     block,
-    'commands'
+    'if_commands'
   );
   // TODO: Assemble JavaScript into code variable.
   var code =
     block.id +
-    ' if ' +
+    ' if_tile ' +
     dropdown_color +
+    '\n' +
+    block.id +
     ' begin\n' +
     statements_commands +
+    block.id +
+    ' end\n';
+  return code;
+};
+
+Blockly.JavaScript['if_else_tile'] = function(block) {
+  var dropdown_color = block.getFieldValue('color');
+  var statements_if_commands = Blockly.JavaScript.statementToCode(
+    block,
+    'if_commands'
+  );
+  var statements_else_commands = Blockly.JavaScript.statementToCode(
+    block,
+    'else_commands'
+  );
+  // TODO: Assemble JavaScript into code variable.
+  var code =
+    block.id +
+    ' if_tile ' +
+    dropdown_color +
+    '\n' +
+    block.id +
+    ' begin\n' +
+    statements_if_commands +
+    block.id +
+    ' else\n' +
+    statements_else_commands +
+    block.id +
+    ' end\n';
+  return code;
+};
+
+Blockly.JavaScript['if_path'] = function(block) {
+  var dropdown_path = block.getFieldValue('path');
+  var statements_commands = Blockly.JavaScript.statementToCode(
+    block,
+    'if_commands'
+  );
+  // TODO: Assemble JavaScript into code variable.
+  var code =
+    block.id +
+    ' if_path ' +
+    dropdown_path +
+    '\n' +
+    block.id +
+    ' begin\n' +
+    statements_commands +
+    block.id +
+    ' end\n';
+  return code;
+};
+
+Blockly.JavaScript['if_else_path'] = function(block) {
+  var dropdown_path = block.getFieldValue('path');
+  var statements_if_commands = Blockly.JavaScript.statementToCode(
+    block,
+    'if_commands'
+  );
+  var statements_else_commands = Blockly.JavaScript.statementToCode(
+    block,
+    'else_commands'
+  );
+  // TODO: Assemble JavaScript into code variable.
+  var code =
+    block.id +
+    ' if_path ' +
+    dropdown_path +
+    '\n' +
+    block.id +
+    ' begin\n' +
+    statements_if_commands +
+    block.id +
+    ' else\n' +
+    statements_else_commands +
     block.id +
     ' end\n';
   return code;

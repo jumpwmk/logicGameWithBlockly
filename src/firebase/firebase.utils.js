@@ -29,6 +29,7 @@ export const createUserProfileDocument = async (userAuth, additionData) => {
         displayName,
         email,
         createdAt,
+        level: 1,
         ...additionData
       });
     } catch (error) {
