@@ -47,32 +47,32 @@ import './homepage.styles.scss';
 
 class Homepage extends React.Component {
   componentDidMount() {
-    this.simpleWorkspace.workspace.addChangeListener(e => {
+    this.simpleWorkspace.workspace.addChangeListener((e) => {
       const { blocks } = this.props;
       let remainBlocks = this.simpleWorkspace.workspace.remainingCapacity();
       store.dispatch({
         type: 'CHANGE_CNT_BLOCKS',
-        payload: { cntBlocks: blocks.maxBlocks - remainBlocks }
+        payload: { cntBlocks: blocks.maxBlocks - remainBlocks },
       });
       store.dispatch({
         type: 'CHANGE_WORKSPACE',
-        payload: { workspace: this.simpleWorkspace.workspace }
+        payload: { workspace: this.simpleWorkspace.workspace },
       });
     });
   }
 
-  changeMap = () => {
+  changeMap = async () => {
+    await fetchData();
     let code = BlocklyJS.workspaceToCode(this.simpleWorkspace.workspace);
     this.simpleWorkspace.workspace.clear();
     saveLog({ code, type: 'change map' });
-    fetchData();
   };
 
   generateCode = async () => {
     let code = BlocklyJS.workspaceToCode(this.simpleWorkspace.workspace);
     store.dispatch({
       type: 'CHANGE_STATE',
-      payload: { state: false }
+      payload: { state: false },
     });
     console.log('testtest');
     console.log(this.simpleWorkspace.workspace.remainingCapacity());
@@ -81,7 +81,7 @@ class Homepage extends React.Component {
     if (res === 'SUCCESS') {
       store.dispatch({
         type: 'CHANGE_CONFIG_MODAL',
-        payload: { modalIsOpen: true }
+        payload: { modalIsOpen: true },
       });
     }
   };
@@ -93,12 +93,12 @@ class Homepage extends React.Component {
 
     store.dispatch({
       type: 'CHANGE_STATE',
-      payload: { state: true }
+      payload: { state: true },
     });
 
     store.dispatch({
       type: 'INIT_PLAYER',
-      payload: { position: player.beginPosition, facing: player.beginFacing }
+      payload: { position: player.beginPosition, facing: player.beginFacing },
     });
 
     const { floatingobj } = store.getState().map;
@@ -113,15 +113,15 @@ class Homepage extends React.Component {
     store.dispatch({
       type: 'CHANGE_FLOATING_OBJ',
       payload: {
-        floatingobj: floatingobj
-      }
+        floatingobj: floatingobj,
+      },
     });
 
     store.dispatch({
       type: 'COLLECT_GEMS',
       payload: {
-        cntGems: 0
-      }
+        cntGems: 0,
+      },
     });
 
     saveLog({ code, type: 'run', res: 'INTERCEPTION' });
@@ -129,6 +129,8 @@ class Homepage extends React.Component {
 
   render() {
     const { blocks } = this.props;
+    console.log(blocks);
+    console.log(blocks.command_blocks);
     return (
       <div className='HomePage'>
         <div className='Game'>
@@ -153,12 +155,12 @@ class Homepage extends React.Component {
           </div>
           <div className='RightPane'>
             <BlocklyComponent
-              ref={e => (this.simpleWorkspace = e)}
+              ref={(e) => (this.simpleWorkspace = e)}
               readOnly={false}
               move={{
                 scrollbars: false,
                 drag: true,
-                wheel: true
+                wheel: true,
               }}
               zoom={{
                 controls: true,
@@ -166,22 +168,17 @@ class Homepage extends React.Component {
                 startScale: 1.0,
                 maxScale: 3,
                 minScale: 0.3,
-                scaleSpeed: 1.2
+                scaleSpeed: 1.2,
               }}
               trashcan={true}
               grid={{ spacing: 30, length: 3, colour: '#ccc', snap: true }}
               maxBlocks={blocks.maxBlocks}
             >
-              <Block type='go_ahead' />
-              <Block type='turn_right' />
-              <Block type='turn_left' />
-              <Block type='collect' />
-              <Block type='for' />
-              <Block type='while_inf' />
-              <Block type='if_tile' />
-              <Block type='if_else_tile' />
-              <Block type='if_path' />
-              <Block type='if_else_path' />
+              {blocks.command_blocks
+                ? blocks.command_blocks.map((command) => (
+                    <Block type={command} />
+                  ))
+                : null}
             </BlocklyComponent>
           </div>
         </div>

@@ -18,22 +18,22 @@ export async function fetchData() {
   // console.log(withBackendUrl(path));
   await axios
     .post(withBackendUrl(path), data)
-    .then(response => {
+    .then((response) => {
       const { tiles, player, blocks } = response.data;
       store.dispatch({
         type: 'ADD_TILES',
-        payload: { ...tiles }
+        payload: { ...tiles },
       });
       store.dispatch({
         type: 'INIT_PLAYER',
-        payload: { ...player }
+        payload: { ...player },
       });
       store.dispatch({
         type: 'INIT_BLOCKS',
-        payload: { state: true, ...blocks }
+        payload: { state: true, ...blocks },
       });
     })
-    .catch(function(error) {
+    .catch(function (error) {
       console.log(error);
       return;
     });

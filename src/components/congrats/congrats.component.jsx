@@ -14,7 +14,7 @@ Modal.setAppElement(document.getElementById('root'));
 const customStyles = {
   overlay: {
     position: 'fixed',
-    zIndex: 10000
+    zIndex: 10000,
   },
   content: {
     top: '50%',
@@ -25,38 +25,38 @@ const customStyles = {
     transform: 'translate(-50%, -50%)',
     width: '400px',
     height: '180px',
-    'border-radius': '10px'
-  }
+    'border-radius': '10px',
+  },
 };
 
 class Congrats extends React.Component {
   closeModal() {
     store.dispatch({
       type: 'CHANGE_CONFIG_MODAL',
-      payload: { modalIsOpen: false }
+      payload: { modalIsOpen: false },
     });
   }
 
-  changeMap = () => {
+  changeMap = async () => {
     console.log(this.props.blocks);
     const { user, blocks } = this.props;
 
     store.dispatch({
       type: 'CHANGE_CONFIG_MODAL',
-      payload: { modalIsOpen: false }
+      payload: { modalIsOpen: false },
     });
 
     user.currentUser.level = user.currentUser.level + 1;
 
     store.dispatch({
       type: 'SET_CURRENT_USER',
-      payload: { ...user.currentUser }
+      payload: { ...user.currentUser },
     });
 
     updateUser({ user: user.currentUser });
 
+    await fetchData();
     blocks.workspace.clear();
-    fetchData();
   };
 
   render() {

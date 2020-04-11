@@ -38,12 +38,12 @@ class BlocklyComponent extends React.Component {
     const { children, ...rest } = this.props;
     this.primaryWorkspace = Blockly.inject(this.blocklyDiv, {
       toolbox: this.toolbox,
-      ...rest
+      ...rest,
     });
 
     store.dispatch({
       type: 'CHANGE_WORKSPACE',
-      payload: { workspace: this.primaryWorkspace }
+      payload: { workspace: this.primaryWorkspace },
     });
   }
 
@@ -54,26 +54,31 @@ class BlocklyComponent extends React.Component {
 
     this.primaryWorkspace = Blockly.inject(this.blocklyDiv, {
       toolbox: this.toolbox,
-      ...rest
+      ...rest,
     });
 
-    this.primaryWorkspace.addChangeListener(e => {
+    this.primaryWorkspace.addChangeListener((e) => {
       const { maxBlocks } = this.props;
       let remainBlocks = this.primaryWorkspace.remainingCapacity();
 
       store.dispatch({
         type: 'CHANGE_CNT_BLOCKS',
-        payload: { cntBlocks: maxBlocks - remainBlocks }
+        payload: { cntBlocks: maxBlocks - remainBlocks },
       });
     });
 
     store.dispatch({
       type: 'CHANGE_WORKSPACE',
-      payload: { workspace: this.primaryWorkspace }
+      payload: { workspace: this.primaryWorkspace },
     });
   }
 
   shouldComponentUpdate(nextProps, nextState) {
+    console.log('shouldComponentUpdate');
+    console.log(this.props);
+    if (this.props.children) {
+      return nextProps.children.length !== this.props.children.length;
+    }
     if (this.props.maxBlocks) {
       return nextProps.maxBlocks !== this.props.maxBlocks;
     }
@@ -96,12 +101,12 @@ class BlocklyComponent extends React.Component {
 
     return (
       <React.Fragment>
-        <div ref={e => (this.blocklyDiv = e)} id='blocklyDiv' />
+        <div ref={(e) => (this.blocklyDiv = e)} id='blocklyDiv' />
         <xml
           xmlns='https://developers.google.com/blockly/xml'
           is='blockly'
           style={{ display: 'none' }}
-          ref={toolbox => {
+          ref={(toolbox) => {
             this.toolbox = toolbox;
           }}
         >

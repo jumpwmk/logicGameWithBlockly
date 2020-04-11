@@ -49,14 +49,14 @@ function move(obj) {
     xb: 'GO_NORTH',
     yf: 'GO_EAST',
     xf: 'GO_SOUTH',
-    yb: 'GO_WEST'
+    yb: 'GO_WEST',
   };
 
   let DIRECTION = {
     xb: { nx_ii: -1, nx_jj: 0 },
     yf: { nx_ii: 0, nx_jj: 1 },
     xf: { nx_ii: 1, nx_jj: 0 },
-    yb: { nx_ii: 0, nx_jj: -1 }
+    yb: { nx_ii: 0, nx_jj: -1 },
   };
 
   let { ii, jj } = coordinate;
@@ -81,7 +81,7 @@ function move(obj) {
     command: 'STRAIGHT', /// test using straight instead of going in the direction
     block: id,
     coordinate: { ii, jj },
-    res: true
+    res: true,
   };
 }
 
@@ -95,13 +95,13 @@ function turn(obj) {
     xb: 'yb',
     yf: 'xb',
     xf: 'yf',
-    yb: 'xf'
+    yb: 'xf',
   };
   let DIRECTION_RIGHT = {
     xb: 'yf',
     yf: 'xf',
     xf: 'yb',
-    yb: 'xb'
+    yb: 'xb',
   };
   if (command === 'turnLeft') direction = DIRECTION_LEFT[direction];
   if (command === 'turnRight') direction = DIRECTION_RIGHT[direction];
@@ -109,7 +109,7 @@ function turn(obj) {
     command: COMMANDS[command],
     block: id,
     res: true,
-    direction: direction
+    direction: direction,
   };
 }
 
@@ -122,7 +122,7 @@ function collect(obj) {
     return {
       command: 'COLLECT',
       block: id,
-      res: true
+      res: true,
     };
   }
 }
@@ -144,12 +144,12 @@ function isOnTile(obj) {
     if (OVERLAY_TYPE[tileoverlay[ii][jj].overlaytype] === condition)
       return {
         block: id,
-        res: true
+        res: true,
       };
   }
   return {
     block: id,
-    res: false
+    res: false,
   };
 }
 
@@ -164,20 +164,20 @@ function isPath(obj) {
     xb: 'LOOK_xb',
     yf: 'LOOK_yf',
     xf: 'LOOK_xf',
-    yb: 'LOOK_yb'
+    yb: 'LOOK_yb',
   };
 
   let DIRECTION_LEFT = {
     xb: 'yb',
     yf: 'xb',
     xf: 'yf',
-    yb: 'xf'
+    yb: 'xf',
   };
   let DIRECTION_RIGHT = {
     xb: 'yf',
     yf: 'xf',
     xf: 'yb',
-    yb: 'xb'
+    yb: 'xb',
   };
 
   if (condition === 'right') {
@@ -226,7 +226,8 @@ function parsingMovement(code) {
     if (tiles[ii][jj] & FINAL) {
       break;
     }
-    // console.log(line[0], line[1]);
+    console.log(line[0], line[1]);
+
     if (line[1] === 'end') {
       if (COUNTS[line[0]]) {
         if (COUNTS[line[0]].type === 'loop') {
@@ -244,12 +245,24 @@ function parsingMovement(code) {
             condition_id = tmp.condition_id;
             condition_res = tmp.condition_res;
           }
+          delete COUNTS[line[0]];
         }
       }
-    } else if (line[1] === 'else' && COUNTS[line[0]].res === false) {
+    } else if (
+      line[1] === 'else' &&
+      line[0] in COUNTS &&
+      COUNTS[line[0]].res === false
+    ) {
+      // it chagne the condition in this but it doesn't change the condition in tmp it will affect in line 245
       condition_res = true;
       condition_id = line[0];
-      tmp_condition.push({ condition_id, condition_res });
+    } else if (
+      line[1] === 'else' &&
+      line[0] in COUNTS &&
+      COUNTS[line[0]].res === true
+    ) {
+      condition_res = false;
+      condition_id = line[0];
     } else if (condition_id && condition_res === false) {
       continue;
     } else if (line[1] === 'if_tile') {
@@ -258,7 +271,7 @@ function parsingMovement(code) {
       const res = isOnTile({
         condition: line[2],
         id: line[0],
-        coordinate: { ii: ii, jj: jj }
+        coordinate: { ii: ii, jj: jj },
       });
       console.log(res);
       if (res.res) {
@@ -276,7 +289,7 @@ function parsingMovement(code) {
         condition: line[2],
         id: line[0],
         coordinate: { ii: ii, jj: jj },
-        direction: direction
+        direction: direction,
       });
       console.log(res);
       if (res.res) {
@@ -326,7 +339,7 @@ function parsingMovement(code) {
           COUNTS[line[0]] = {
             count: parseInt(line[2]),
             begin: i,
-            type: 'loop'
+            type: 'loop',
           };
         }
       }
