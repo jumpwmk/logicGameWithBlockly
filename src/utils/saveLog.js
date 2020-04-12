@@ -5,13 +5,13 @@ import { withBackendUrl } from './withBackendUrl';
 
 async function fetchData(data) {
   const path = '/logs/save-log';
-  console.log(withBackendUrl(path));
+  console.log('url:' + withBackendUrl(path));
   await axios
     .post(withBackendUrl(path), data)
-    .then(response => {
+    .then((response) => {
       console.log(response);
     })
-    .catch(function(error) {
+    .catch(function (error) {
       console.log(error);
       return;
     });

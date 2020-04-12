@@ -21,7 +21,7 @@
   },
   "scripts": {
     "start": "REACT_APP_NODE_ENV=development react-scripts start",
-    "build": "REACT_APP_NODE_ENV=test react-scripts build",
+    "build": "REACT_APP_NODE_ENV=development react-scripts build",
     "test": "REACT_APP_NODE_ENV=test react-scripts test",
     "eject": "react-scripts eject"
   },
