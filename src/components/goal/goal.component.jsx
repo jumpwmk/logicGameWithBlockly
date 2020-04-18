@@ -30,11 +30,11 @@ function MaxBlocks(props) {
   if (true) {
     return (
       <div className='text complete'>
-        {blocks.cntBlocks} / {blocks.maxBlocks} คำสั่ง
+        {blocks.cntBlocks} / {blocks.maxBlocks} บล็อก
       </div>
     );
   } else {
-    return <div className='text'>0 / {blocks.maxBlocks} คำสั่ง</div>;
+    return <div className='text'>0 / {blocks.maxBlocks} บล็อก</div>;
   }
 }
 

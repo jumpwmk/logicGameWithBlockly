@@ -57,6 +57,11 @@ class BlocklyComponent extends React.Component {
       ...rest,
     });
 
+    store.dispatch({
+      type: 'CHANGE_WORKSPACE',
+      payload: { workspace: this.primaryWorkspace },
+    });
+
     this.primaryWorkspace.addChangeListener((e) => {
       const { maxBlocks } = this.props;
       let remainBlocks = this.primaryWorkspace.remainingCapacity();
@@ -66,22 +71,34 @@ class BlocklyComponent extends React.Component {
         payload: { cntBlocks: maxBlocks - remainBlocks },
       });
     });
-
-    store.dispatch({
-      type: 'CHANGE_WORKSPACE',
-      payload: { workspace: this.primaryWorkspace },
-    });
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    console.log('shouldComponentUpdate');
+    console.log('shouldComponentUpdate ka');
     console.log(this.props);
+    console.log(nextProps);
+
     if (this.props.children) {
-      return nextProps.children.length !== this.props.children.length;
+      if (nextProps.children.length !== this.props.children.length) return true;
     }
     if (this.props.maxBlocks) {
-      return nextProps.maxBlocks !== this.props.maxBlocks;
+      if (nextProps.maxBlocks !== this.props.maxBlocks) return true;
     }
+
+    if (this.props.children && nextProps.children) {
+      let tmp = {};
+      let chk = false;
+      for (let i = 0; i < this.props.children.length; i++) {
+        tmp[this.props.children[i].props.type] = true;
+      }
+      for (let i = 0; i < nextProps.children.length; i++) {
+        if (!(nextProps.children[0].props.type in tmp)) {
+          chk = true;
+        }
+      }
+      if (chk) return true;
+    }
+
     return false;
   }
 

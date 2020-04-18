@@ -56,6 +56,7 @@ class Congrats extends React.Component {
     updateUser({ user: user.currentUser });
 
     await fetchData();
+
     blocks.workspace.clear();
   };
 

@@ -118,7 +118,14 @@ function collect(obj) {
   const { floatingobj } = store.getState().map;
   let { ii, jj } = coordinate;
 
-  if (floatingobj[ii][jj] !== null && floatingobj[ii][jj].visible) {
+  if (
+    floatingobj[ii][jj] === null ||
+    floatingobj[ii][jj] === undefined ||
+    floatingobj[ii][jj].chk
+  )
+    return { res: false, command: 'FAIL_COLLECT', block: id };
+  if (floatingobj[ii][jj].visible) {
+    floatingobj[ii][jj].chk = true;
     return {
       command: 'COLLECT',
       block: id,
@@ -198,7 +205,7 @@ function isPath(obj) {
 function parsingMovement(code) {
   let COUNTS = {};
 
-  const tiles = store.getState().map.tiles;
+  const { floatingobj, tiles } = store.getState().map;
 
   let tmp_condition = [];
   let condition_id = null;
@@ -208,6 +215,8 @@ function parsingMovement(code) {
   let pos = store.getState().player.position;
   let ii = pos[0];
   let jj = pos[1];
+
+  let tmpGemsCoordinate = [];
 
   let commands = [];
   let blocks = [];
@@ -331,6 +340,11 @@ function parsingMovement(code) {
           cntGems++;
           commands.push(res.command);
           blocks.push(res.block);
+          tmpGemsCoordinate.push({ ii, jj });
+        } else {
+          commands.push(res.command);
+          blocks.push(res.block);
+          break;
         }
       } else if (line[1] === 'for') {
         if (line[2] === 'INFINITY') {
@@ -344,6 +358,10 @@ function parsingMovement(code) {
         }
       }
     }
+  }
+  while (tmpGemsCoordinate.length) {
+    const tmp = tmpGemsCoordinate.pop();
+    floatingobj[tmp.ii][tmp.jj].chk = false;
   }
   if (tiles[ii][jj] & FINAL && cntGems === maxGems) {
     commands.push('FINISH');
