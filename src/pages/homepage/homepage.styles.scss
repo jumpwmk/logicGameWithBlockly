@@ -70,7 +70,8 @@ body {
   padding: 0px 25px;
   font-size: 20px;
   border-radius: 8px;
-  width: 240px;
+  margin-left: 25px;
+  width: 200px;
   height: 50px;
 }
 
@@ -83,6 +84,7 @@ body {
   display: flex;
   flex-direction: row;
   justify-content: center;
+  justify-content: space-between;
   bottom: 5px;
   right: 10px;
   background-color: #dd4b39;
@@ -114,4 +116,60 @@ body {
   width: 20px;
   height: 20px;
   margin-right: 15px;
+}
+
+.ShowSolutionBtn {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  bottom: 5px;
+  right: 10px;
+  background-color: #00b300;
+  color: white;
+  padding: 0px 25px;
+  margin-left: 25px;
+  font-size: 20px;
+  border-radius: 8px;
+  width: 120px;
+  height: 50px;
+}
+
+.DebugBtn {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  bottom: 5px;
+  right: 10px;
+  background-color: #00b300;
+  color: white;
+  padding: 0px 25px;
+  margin-left: 25px;
+  font-size: 20px;
+  border-radius: 8px;
+  width: 120px;
+  height: 50px;
+}
+
+.NextBtn {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  justify-content: space-between;
+  bottom: 5px;
+  right: 10px;
+  background-color: #00b300;
+  color: white;
+  padding: 0px 25px;
+  margin-right: 50px;
+  margin-left: 25px;
+  font-size: 20px;
+  border-radius: 8px;
+  width: 220px;
+  height: 50px;
+}
+
+.NextBtn:hover {
+  background-color: #00cc00;
+  cursor: pointer;
 }

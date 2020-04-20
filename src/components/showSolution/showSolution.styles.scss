@@ -1,0 +1,35 @@
+.header-modal {
+  height: 25px;
+  width: 450px;
+  background-color: #ddd;
+  margin: -20px 0px 0px -20px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.btn-pane {
+  direction: rtl;
+}
+
+.btn {
+  width: 72px;
+  height: 46px;
+  margin-left: 10px;
+  border-radius: 4px;
+}
+
+.cancel {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.ok {
+  background-color: #00b3009f;
+}
+
+.congrats-text {
+  color: #dc742f;
+}
+
+.next-state {
+  color: black;
+}

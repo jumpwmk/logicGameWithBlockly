@@ -2,6 +2,7 @@ const initialState = {
   maxBlocks: 1000,
   workspace: null,
   state: true,
+  commands: {},
 };
 
 const blocksReducer = (state = initialState, action) => {
@@ -37,6 +38,11 @@ const blocksReducer = (state = initialState, action) => {
         ...action.payload,
       };
     case 'INIT_BLOCKLY_DIV':
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case 'CHANGE_STATUS_BLOCKS':
       return {
         ...state,
         ...action.payload,

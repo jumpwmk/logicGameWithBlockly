@@ -33,7 +33,7 @@ import '../fields/DateField';
 // go ahead
 
 Blockly.Blocks['go_ahead'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput().appendField('ตรงไป');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -42,19 +42,17 @@ Blockly.Blocks['go_ahead'] = {
     this.setHelpUrl(
       'https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#c477mo'
     );
-  }
+  },
 };
 
 // for loop
 Blockly.Blocks['for'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
       .appendField('วน')
       .appendField(new Blockly.FieldNumber(0), 'loop')
       .appendField('ครั้ง');
-    this.appendStatementInput('inner for')
-      .setCheck(null)
-      .appendField('ทำ');
+    this.appendStatementInput('inner for').setCheck(null).appendField('ทำ');
     this.setInputsInline(false);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -63,28 +61,26 @@ Blockly.Blocks['for'] = {
     this.setHelpUrl(
       'https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#8u6byt'
     );
-  }
+  },
 };
 
 // for inf
 Blockly.Blocks['while_inf'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput().appendField('while true');
-    this.appendStatementInput('inner_loop')
-      .setCheck(null)
-      .appendField('ทำ');
+    this.appendStatementInput('inner_loop').setCheck(null).appendField('ทำ');
     this.setPreviousStatement(true, null);
     this.setColour(120);
     this.setTooltip('for inf');
     this.setHelpUrl(
       'https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#hq4zhn'
     );
-  }
+  },
 };
 
 // number
 Blockly.Blocks['number'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
       .setAlign(Blockly.ALIGN_CENTRE)
       .appendField(new Blockly.FieldNumber(0, 0, 100), 'number');
@@ -94,12 +90,12 @@ Blockly.Blocks['number'] = {
     this.setHelpUrl(
       'https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#wdgtsd'
     );
-  }
+  },
 };
 
 // turn right
 Blockly.Blocks['turn_right'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
       .appendField('หมุนขวา')
       .appendField(
@@ -117,12 +113,12 @@ Blockly.Blocks['turn_right'] = {
     this.setHelpUrl(
       'https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#f2on25'
     );
-  }
+  },
 };
 
 // turn left
 Blockly.Blocks['turn_left'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
       .appendField('หมุนซ้าย')
       .appendField(
@@ -140,12 +136,12 @@ Blockly.Blocks['turn_left'] = {
     this.setHelpUrl(
       'https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#y2b6c5'
     );
-  }
+  },
 };
 
 // collect
 Blockly.Blocks['collect'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput().appendField('เก็บของ');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -154,19 +150,19 @@ Blockly.Blocks['collect'] = {
     this.setHelpUrl(
       'https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#odz7qx'
     );
-  }
+  },
 };
 
 // if_tile
 Blockly.Blocks['if_tile'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
       .appendField('กรณีอยู่บนแผ่น')
       .appendField(
         new Blockly.FieldDropdown([
           ['สีเขียว', 'green'],
           ['สีเหลือง', 'yellow'],
-          ['สีดำ', 'black']
+          ['สีดำ', 'black'],
         ]),
         'color'
       );
@@ -178,19 +174,19 @@ Blockly.Blocks['if_tile'] = {
     this.setHelpUrl(
       'https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#89if4f'
     );
-  }
+  },
 };
 
 // if_else_tile
 Blockly.Blocks['if_else_tile'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
       .appendField('กรณีอยู่บนแผ่น')
       .appendField(
         new Blockly.FieldDropdown([
           ['สีเขียว', 'green'],
           ['สีเหลือง', 'yellow'],
-          ['สีดำ', 'black']
+          ['สีดำ', 'black'],
         ]),
         'color'
       );
@@ -204,19 +200,19 @@ Blockly.Blocks['if_else_tile'] = {
       'https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#3urwxk'
     );
     this.setHelpUrl('');
-  }
+  },
 };
 
 //if_path
 Blockly.Blocks['if_path'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
       .appendField('กรณีมีทางไป')
       .appendField(
         new Blockly.FieldDropdown([
           ['ทางซ้าย', 'left'],
           ['ทางขวา', 'right'],
-          ['ข้างหน้า', 'ahead']
+          ['ข้างหน้า', 'ahead'],
         ]),
         'path'
       );
@@ -228,19 +224,19 @@ Blockly.Blocks['if_path'] = {
       'https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#6eibf3'
     );
     this.setHelpUrl('');
-  }
+  },
 };
 
 // if_else_path
 Blockly.Blocks['if_else_path'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
       .appendField('กรณีมีทางไป')
       .appendField(
         new Blockly.FieldDropdown([
           ['ทางซ้าย', 'left'],
           ['ทางขวา', 'right'],
-          ['ข้างหน้า', 'ahead']
+          ['ข้างหน้า', 'ahead'],
         ]),
         'path'
       );
@@ -254,5 +250,18 @@ Blockly.Blocks['if_else_path'] = {
       'https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#23sb82'
     );
     this.setHelpUrl('');
-  }
+  },
+};
+
+// begin
+Blockly.Blocks['begin'] = {
+  init: function () {
+    this.appendDummyInput().appendField('เริ่มต้น');
+    this.setNextStatement(true, null);
+    this.setColour(0);
+    this.setTooltip('');
+    this.setHelpUrl(
+      'https://blockly-demo.appspot.com/static/demos/blockfactory/index.html#i87vo9'
+    );
+  },
 };

@@ -221,6 +221,8 @@ function parsingMovement(code) {
   let commands = [];
   let blocks = [];
 
+  let lastBlock = null;
+
   let ticks = 400; // set time out
   let { cntGems, maxGems } = store.getState().blocks;
   console.log('start running code here');
@@ -236,6 +238,8 @@ function parsingMovement(code) {
       break;
     }
     console.log(line[0], line[1]);
+
+    lastBlock = id;
 
     if (line[1] === 'end') {
       if (COUNTS[line[0]]) {
@@ -365,16 +369,16 @@ function parsingMovement(code) {
   }
   if (tiles[ii][jj] & FINAL && cntGems === maxGems) {
     commands.push('FINISH');
-    blocks.push(null);
+    blocks.push(lastBlock);
     return { commands, blocks, res: 'SUCCESS' };
   } else if (ticks === 0) {
     commands.push('NULL');
-    blocks.push(null);
+    blocks.push(lastBlock);
     console.log(commands);
     return { commands, blocks, res: 'TIMEOUT' };
   } else {
     commands.push('NULL');
-    blocks.push(null);
+    blocks.push(lastBlock);
     console.log(commands);
     return { commands, blocks, res: 'FAILURE' };
   }

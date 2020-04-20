@@ -23,7 +23,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-
+import Blockly from 'blockly/core';
 import BlocklyComponent, { Block } from '../../components/blockly';
 
 import BlocklyJS from 'blockly/javascript';
@@ -32,16 +32,18 @@ import '../../components/custom-blocks/custom-blocks';
 import '../../components/custom-blocks/generator';
 
 import World from '../../components/world/world.component';
-// import BlocklyWorkspace from '../../components/blockly-workspace/blockly-workspace.component';
 import { ReactComponent as Play } from '../../images/play.svg';
 import { ReactComponent as Reset } from '../../images/reset.svg';
 
 import animate from '../../utils/animate';
+import animateOneAction from '../../utils/animateOneAction';
 import { store } from '../../redux/store';
 import { saveLog } from '../../utils/saveLog';
 import { fetchData } from '../../utils/fetchData';
 import Congrats from '../../components/congrats/congrats.component';
+import ShowSolution from '../../components/showSolution/showSolution.component';
 import { MAP_W, MAP_H } from '../../config/constants';
+import parsingMovement from '../../utils/parsingMovement';
 
 import './homepage.styles.scss';
 
@@ -62,10 +64,32 @@ class Homepage extends React.Component {
   }
 
   changeMap = async () => {
-    await fetchData();
     let code = BlocklyJS.workspaceToCode(this.simpleWorkspace.workspace);
+    await saveLog({ code, type: 'change map' });
+
     this.simpleWorkspace.workspace.clear();
-    saveLog({ code, type: 'change map' });
+
+    await fetchData();
+
+    store.dispatch({
+      type: 'INIT_DEBUG',
+      payload: { status: false, commands: [], blocks: [], res: false, idx: 0 },
+    });
+  };
+
+  showSolution = async () => {
+    let code = BlocklyJS.workspaceToCode(this.simpleWorkspace.workspace);
+    saveLog({ code, type: 'show solution' });
+
+    store.dispatch({
+      type: 'INIT_DEBUG',
+      payload: { status: false, commands: [], blocks: [], res: false, idx: 0 },
+    });
+
+    store.dispatch({
+      type: 'CHANGE_CONFIG_MODAL',
+      payload: { solution: true },
+    });
   };
 
   generateCode = async () => {
@@ -74,14 +98,12 @@ class Homepage extends React.Component {
       type: 'CHANGE_STATE',
       payload: { state: false },
     });
-    console.log('testtest');
-    console.log(this.simpleWorkspace.workspace.remainingCapacity());
     const res = await animate(code, this.simpleWorkspace.workspace);
     saveLog({ code, type: 'run', res });
     if (res === 'SUCCESS') {
       store.dispatch({
         type: 'CHANGE_CONFIG_MODAL',
-        payload: { modalIsOpen: true },
+        payload: { congrats: true },
       });
     }
   };
@@ -97,11 +119,17 @@ class Homepage extends React.Component {
     });
 
     store.dispatch({
+      type: 'INIT_DEBUG',
+      payload: { status: false, commands: [], blocks: [], res: false, idx: 0 },
+    });
+
+    store.dispatch({
       type: 'INIT_PLAYER',
       payload: { position: player.beginPosition, facing: player.beginFacing },
     });
 
     const { floatingobj } = store.getState().map;
+
     for (let i = 0; i < MAP_W; i++) {
       for (let j = 0; j < MAP_H; j++) {
         if (floatingobj[i][j] !== null) {
@@ -127,17 +155,168 @@ class Homepage extends React.Component {
     saveLog({ code, type: 'run', res: 'INTERCEPTION' });
   };
 
+  debug = async () => {
+    const { debug } = this.props;
+
+    if (debug.status === false) {
+      let code = BlocklyJS.workspaceToCode(this.simpleWorkspace.workspace);
+      const { commands, blocks, res } = await parsingMovement(code);
+      saveLog({ code, type: 'debug', res });
+      let idx = 0;
+      const command = commands[idx];
+      const block = blocks[idx];
+
+      animateOneAction({
+        command,
+        block,
+        workspace: this.simpleWorkspace.workspace,
+      });
+
+      store.dispatch({
+        type: 'INIT_DEBUG',
+        payload: { status: true, commands, blocks, res, idx: 1 },
+      });
+
+      if (commands.length === 0) {
+        if (res === 'SUCCESS') {
+          store.dispatch({
+            type: 'CHANGE_CONFIG_MODAL',
+            payload: { congrats: true },
+          });
+        }
+        store.dispatch({
+          type: 'INIT_DEBUG',
+          payload: {
+            status: false,
+            commands: [],
+            blocks: [],
+            res: false,
+            idx: 0,
+          },
+        });
+      }
+    } else {
+      const { commands, blocks, res, idx } = debug;
+
+      const command = commands[idx];
+      const block = blocks[idx];
+
+      animateOneAction({
+        command,
+        block,
+        workspace: this.simpleWorkspace.workspace,
+      });
+
+      store.dispatch({
+        type: 'CHANGE_IDX_DEBUG',
+        payload: { idx: debug.idx + 1 },
+      });
+
+      if (commands.length === 0) {
+        if (res === 'SUCCESS') {
+          store.dispatch({
+            type: 'CHANGE_CONFIG_MODAL',
+            payload: { congrats: true },
+          });
+        }
+        store.dispatch({
+          type: 'INIT_DEBUG',
+          payload: {
+            status: false,
+            commands: [],
+            blocks: [],
+            res: false,
+            idx: 0,
+          },
+        });
+      }
+    }
+  };
+
+  debug = async () => {
+    const { debug } = this.props;
+
+    let code = BlocklyJS.workspaceToCode(this.simpleWorkspace.workspace);
+    const { commands, blocks, res } = await parsingMovement(code);
+    saveLog({ code, type: 'debug', res });
+    let idx = 0;
+    const command = commands[idx];
+    const block = blocks[idx];
+
+    animateOneAction({
+      command,
+      block,
+      workspace: this.simpleWorkspace.workspace,
+    });
+
+    if (commands.length === 1) {
+      if (res === 'SUCCESS') {
+        store.dispatch({
+          type: 'CHANGE_CONFIG_MODAL',
+          payload: { congrats: true },
+        });
+      }
+      store.dispatch({
+        type: 'INIT_DEBUG',
+        payload: {
+          status: false,
+          commands: [],
+          blocks: [],
+          res: false,
+          idx: 0,
+        },
+      });
+    } else {
+      store.dispatch({
+        type: 'INIT_DEBUG',
+        payload: { status: true, commands, blocks, res, idx: 1 },
+      });
+    }
+  };
+
+  nextAction = async () => {
+    const { debug } = this.props;
+    const { commands, blocks, res, idx } = debug;
+
+    const command = commands[idx];
+    const block = blocks[idx];
+
+    animateOneAction({
+      command,
+      block,
+      workspace: this.simpleWorkspace.workspace,
+    });
+
+    if (commands.length === idx + 2) {
+      if (res === 'SUCCESS') {
+        store.dispatch({
+          type: 'CHANGE_CONFIG_MODAL',
+          payload: { congrats: true },
+        });
+      }
+    } else if (commands.length === idx + 2) {
+    }
+    store.dispatch({
+      type: 'CHANGE_IDX_DEBUG',
+      payload: { idx: debug.idx + 1 },
+    });
+  };
+
   render() {
-    const { blocks } = this.props;
-    console.log(blocks);
-    console.log(blocks.command_blocks);
+    const { blocks, debug } = this.props;
     return (
       <div className='HomePage'>
         <div className='Game'>
           <div className='LeftPane'>
             <World />
             <div className='ConvertBtnPane'>
-              {blocks.state ? (
+              {debug.status ? (
+                <button className='NextBtn' onClick={this.nextAction}>
+                  <div>NEXT</div>
+                  <Play className='Play' />
+                </button>
+              ) : null}
+              {blocks.state && !debug.status ? (
                 <button className='RunBtn' onClick={this.generateCode}>
                   <div>RUN PROGRAM</div>
                   <Play className='Play' />
@@ -148,9 +327,21 @@ class Homepage extends React.Component {
                   <Reset className='Reset' />
                 </button>
               )}
-              <button className='ChangeMapBtn' onClick={this.changeMap}>
-                <div>CHANGE MAP</div>
-              </button>
+              {blocks.state && !debug.status ? (
+                <button className='ChangeMapBtn' onClick={this.changeMap}>
+                  <div>CHANGE MAP</div>
+                </button>
+              ) : null}
+              {blocks.state && !debug.status ? (
+                <button className='ShowSolutionBtn' onClick={this.showSolution}>
+                  <div>SOLUTION</div>
+                </button>
+              ) : null}
+              {blocks.state && !debug.status ? (
+                <button className='DebugBtn' onClick={this.debug}>
+                  <div>DEBUG</div>
+                </button>
+              ) : null}
             </div>
           </div>
           <div className='RightPane'>
@@ -176,20 +367,21 @@ class Homepage extends React.Component {
             >
               {blocks.command_blocks
                 ? blocks.command_blocks.map((command) => (
-                    <Block type={command} />
+                    <Block type={command} id={command} />
                   ))
                 : null}
             </BlocklyComponent>
           </div>
         </div>
         <Congrats />
+        <ShowSolution />
       </div>
     );
   }
 }
 
-const mapStateToProps = ({ blocks }) => {
-  return { blocks };
+const mapStateToProps = ({ blocks, debug }) => {
+  return { blocks, debug };
 };
 
 export default connect(mapStateToProps)(Homepage);

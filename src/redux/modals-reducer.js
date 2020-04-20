@@ -1,17 +1,18 @@
 const initialState = {
-  modalIsOpen: false
+  congrats: false,
+  solution: false,
 };
 
-const congratsReducer = (state = initialState, action) => {
+const modalsReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'CHANGE_CONFIG_MODAL':
       return {
         ...state,
-        ...action.payload
+        ...action.payload,
       };
     default:
       return state;
   }
 };
 
-export default congratsReducer;
+export default modalsReducer;

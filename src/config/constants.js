@@ -8,7 +8,7 @@ export const PLAYER_W = 45;
 export const PLAYER_H = 67.5;
 export const PLATFORM_WALL_H = 76.7025;
 export const FLOATING_OBJ_H = 78;
-export const MAP_W = 12;
+export const MAP_W = 11;
 export const MAP_H = 12;
 export const PLATFORM_TILE = ['platform-tile-1.svg', 'platform-tile-2.svg'];
 

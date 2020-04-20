@@ -10,11 +10,8 @@ import { auth } from '../../firebase/firebase.utils';
 
 import './header.styles.scss';
 
-const Header = props => {
+const Header = (props) => {
   const { user } = props;
-
-  console.log('user');
-  console.log(user.currentUser);
 
   return (
     <div className='header'>

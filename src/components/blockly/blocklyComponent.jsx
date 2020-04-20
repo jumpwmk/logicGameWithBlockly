@@ -25,11 +25,12 @@ import React from 'react';
 
 import './blocklyComponent.css';
 
-import { store } from '../../redux/store';
-
+import { connect } from 'react-redux';
 import Blockly from 'blockly/core';
 import locale from 'blockly/msg/th';
 import 'blockly/blocks';
+
+import { store } from '../../redux/store';
 
 Blockly.setLocale(locale);
 
@@ -57,6 +58,11 @@ class BlocklyComponent extends React.Component {
       ...rest,
     });
 
+    var xml = Blockly.Xml.textToDom(
+      '<xml xmlns="http://www.w3.org/1999/xhtml"><block type="begin" id="begin" x="40" y="40"></block></xml>'
+    );
+    Blockly.Xml.domToWorkspace(xml, this.primaryWorkspace);
+
     store.dispatch({
       type: 'CHANGE_WORKSPACE',
       payload: { workspace: this.primaryWorkspace },
@@ -74,10 +80,13 @@ class BlocklyComponent extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    console.log('shouldComponentUpdate ka');
-    console.log(this.props);
-    console.log(nextProps);
-
+    if (store.getState().blocks.status) {
+      store.dispatch({
+        type: 'CHANGE_STATUS_BLOCKS',
+        payload: { status: false },
+      });
+      return true;
+    }
     if (this.props.children) {
       if (nextProps.children.length !== this.props.children.length) return true;
     }
@@ -133,5 +142,11 @@ class BlocklyComponent extends React.Component {
     );
   }
 }
+
+// const mapStateToProps = ({ blocks }) => {
+//   return { blocks };
+// };
+
+// export default connect(mapStateToProps)(BlocklyComponent);
 
 export default BlocklyComponent;

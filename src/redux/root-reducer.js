@@ -5,7 +5,8 @@ import map from './map-reducer';
 import world from './world-reducer';
 import user from './user-reducer';
 import blocks from './blocks-reducer';
-import congrats from './congrats-reducer';
+import modals from './modals-reducer';
+import debug from './debug-reducer';
 
 const rootReducer = combineReducers({
   player,
@@ -13,7 +14,8 @@ const rootReducer = combineReducers({
   world,
   user,
   blocks,
-  congrats
+  modals,
+  debug,
 });
 
 export default rootReducer;
