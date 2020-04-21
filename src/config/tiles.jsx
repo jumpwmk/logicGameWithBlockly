@@ -12,7 +12,7 @@ export const tiles = {
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   ],
   platform: [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -26,7 +26,7 @@ export const tiles = {
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   ],
   wall: [
     [null, null, null, null, null, null, null, null, null, null, null, null],
@@ -46,14 +46,14 @@ export const tiles = {
       { yf: { walltype: 1, permanent: true } },
       {},
       null,
-      null
+      null,
     ],
     [null, null, null, null, null, null, null, null, null, {}, null, null],
     [null, null, null, null, null, null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null, null, null, null, null]
+    [null, null, null, null, null, null, null, null, null, null, null, null],
   ],
   enemies: [
     [null, null, null, null, null, null, null, null, null, null, null, null],
@@ -67,7 +67,7 @@ export const tiles = {
     [null, null, null, null, null, null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null, null, null, null, null]
+    [null, null, null, null, null, null, null, null, null, null, null, null],
   ],
   tileoverlay: [
     [null, null, null, null, null, null, null, null, null, null, null, null],
@@ -87,14 +87,14 @@ export const tiles = {
       { overlaytype: 1 },
       null,
       null,
-      null
+      null,
     ],
     [null, null, null, null, null, null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null, null, null, null, null]
+    [null, null, null, null, null, null, null, null, null, null, null, null],
   ],
   floatingobj: [
     [null, null, null, null, null, null, null, null, null, null, null, null],
@@ -108,7 +108,7 @@ export const tiles = {
     [null, null, null, null, null, null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null, null, null, null, null]
+    [null, null, null, null, null, null, null, null, null, null, null, null],
   ],
   walloverlay: [
     [null, null, null, null, null, null, null, null, null, null, null, null],
@@ -122,7 +122,7 @@ export const tiles = {
     [null, null, null, null, null, null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null, null, null, null, null]
+    [null, null, null, null, null, null, null, null, null, null, null, null],
   ],
-  end: { x: 6, y: 9 }
+  end: { x: 6, y: 9 },
 };

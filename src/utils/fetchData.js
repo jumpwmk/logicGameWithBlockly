@@ -3,9 +3,12 @@ import axios from 'axios';
 import { withBackendUrl } from './withBackendUrl';
 import { store } from '../redux/store';
 
-export async function fetchData() {
+export async function fetchData(obj) {
   const path = '/maps/get-map';
   let data;
+  if (obj && obj.level) {
+    data = { level: obj.level };
+  }
   if (
     store.getState().user &&
     store.getState().user.currentUser &&
@@ -15,7 +18,7 @@ export async function fetchData() {
   } else {
     data = { level: 1 };
   }
-  // console.log(withBackendUrl(path));
+
   await axios
     .post(withBackendUrl(path), data)
     .then((response) => {

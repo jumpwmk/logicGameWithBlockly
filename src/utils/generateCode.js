@@ -2,7 +2,7 @@ export function generateCodeFromObj(obj) {
   let { commands, indent } = obj;
   commands = { ...commands };
   let COMMANDS = [
-    'moveForward();\r\n',
+    'moveForward()\r\n',
     'turnRight()\r\n',
     'turnLeft()\r\n',
     'dontHave()\r\n',
@@ -68,6 +68,35 @@ export function generateCodeFromObj(obj) {
     });
   } else {
     console.log('there is a bug in generating code');
+  }
+  return str;
+}
+
+export function generateCodeFromCode(code) {
+  if (code === undefined || code === null) return '';
+  let str = '';
+  let lines = code.trim().split('\n');
+  let indent = 0;
+  for (let i = 1; i < lines.length; i++) {
+    let line = lines[i].trim().split(' ');
+    if (line[1] === 'begin') indent++;
+    else if (line[1] === 'end') indent--;
+    else {
+      for (let j = 0; j < indent; j++) str += '  ';
+      if (line[1] === 'for') {
+        if (line[2] === '1000') {
+          str += 'while(true):\r\n';
+        } else {
+          str += 'while(true):\r\n';
+        }
+      } else if (line[1] === 'if_tile') {
+        str += 'if( on ' + line[2] + ' tile):\r\n';
+      } else if (line[1] === 'if_path') {
+        str += 'if( ' + line[2] + ' ):\r\n';
+      } else {
+        str += line[1] + '()\r\n';
+      }
+    }
   }
   return str;
 }

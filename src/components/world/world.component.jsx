@@ -12,11 +12,9 @@ import { store } from '../../redux/store';
 import './world.styles.scss';
 
 function World(props) {
-  // const { world } = props;
-  // set map tiles for current map
   store.dispatch({
     type: 'ADD_TILES',
-    payload: { ...tiles }
+    payload: { ...tiles },
   });
 
   return (

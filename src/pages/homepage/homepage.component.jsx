@@ -23,7 +23,6 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import Blockly from 'blockly/core';
 import BlocklyComponent, { Block } from '../../components/blockly';
 
 import BlocklyJS from 'blockly/javascript';
@@ -35,6 +34,8 @@ import World from '../../components/world/world.component';
 import { ReactComponent as Play } from '../../images/play.svg';
 import { ReactComponent as Reset } from '../../images/reset.svg';
 
+import firebase from 'firebase/app';
+
 import animate from '../../utils/animate';
 import animateOneAction from '../../utils/animateOneAction';
 import { store } from '../../redux/store';
@@ -44,23 +45,26 @@ import Congrats from '../../components/congrats/congrats.component';
 import ShowSolution from '../../components/showSolution/showSolution.component';
 import { MAP_W, MAP_H } from '../../config/constants';
 import parsingMovement from '../../utils/parsingMovement';
+import { Redirect } from 'react-router-dom';
 
 import './homepage.styles.scss';
 
 class Homepage extends React.Component {
   componentDidMount() {
-    this.simpleWorkspace.workspace.addChangeListener((e) => {
-      const { blocks } = this.props;
-      let remainBlocks = this.simpleWorkspace.workspace.remainingCapacity();
-      store.dispatch({
-        type: 'CHANGE_CNT_BLOCKS',
-        payload: { cntBlocks: blocks.maxBlocks - remainBlocks },
+    if (this.simpleWorkspace) {
+      this.simpleWorkspace.workspace.addChangeListener((e) => {
+        const { blocks } = this.props;
+        let remainBlocks = this.simpleWorkspace.workspace.remainingCapacity();
+        store.dispatch({
+          type: 'CHANGE_CNT_BLOCKS',
+          payload: { cntBlocks: blocks.maxBlocks - remainBlocks },
+        });
+        store.dispatch({
+          type: 'CHANGE_WORKSPACE',
+          payload: { workspace: this.simpleWorkspace.workspace },
+        });
       });
-      store.dispatch({
-        type: 'CHANGE_WORKSPACE',
-        payload: { workspace: this.simpleWorkspace.workspace },
-      });
-    });
+    }
   }
 
   changeMap = async () => {
@@ -100,12 +104,11 @@ class Homepage extends React.Component {
     });
     const res = await animate(code, this.simpleWorkspace.workspace);
     saveLog({ code, type: 'run', res });
-    if (res === 'SUCCESS') {
-      store.dispatch({
-        type: 'CHANGE_CONFIG_MODAL',
-        payload: { congrats: true },
-      });
-    }
+    console.log(res);
+    store.dispatch({
+      type: 'CHANGE_CONFIG_MODAL',
+      payload: { congrats: true, res: res, code: code },
+    });
   };
 
   cancelCode = () => {
@@ -156,86 +159,6 @@ class Homepage extends React.Component {
   };
 
   debug = async () => {
-    const { debug } = this.props;
-
-    if (debug.status === false) {
-      let code = BlocklyJS.workspaceToCode(this.simpleWorkspace.workspace);
-      const { commands, blocks, res } = await parsingMovement(code);
-      saveLog({ code, type: 'debug', res });
-      let idx = 0;
-      const command = commands[idx];
-      const block = blocks[idx];
-
-      animateOneAction({
-        command,
-        block,
-        workspace: this.simpleWorkspace.workspace,
-      });
-
-      store.dispatch({
-        type: 'INIT_DEBUG',
-        payload: { status: true, commands, blocks, res, idx: 1 },
-      });
-
-      if (commands.length === 0) {
-        if (res === 'SUCCESS') {
-          store.dispatch({
-            type: 'CHANGE_CONFIG_MODAL',
-            payload: { congrats: true },
-          });
-        }
-        store.dispatch({
-          type: 'INIT_DEBUG',
-          payload: {
-            status: false,
-            commands: [],
-            blocks: [],
-            res: false,
-            idx: 0,
-          },
-        });
-      }
-    } else {
-      const { commands, blocks, res, idx } = debug;
-
-      const command = commands[idx];
-      const block = blocks[idx];
-
-      animateOneAction({
-        command,
-        block,
-        workspace: this.simpleWorkspace.workspace,
-      });
-
-      store.dispatch({
-        type: 'CHANGE_IDX_DEBUG',
-        payload: { idx: debug.idx + 1 },
-      });
-
-      if (commands.length === 0) {
-        if (res === 'SUCCESS') {
-          store.dispatch({
-            type: 'CHANGE_CONFIG_MODAL',
-            payload: { congrats: true },
-          });
-        }
-        store.dispatch({
-          type: 'INIT_DEBUG',
-          payload: {
-            status: false,
-            commands: [],
-            blocks: [],
-            res: false,
-            idx: 0,
-          },
-        });
-      }
-    }
-  };
-
-  debug = async () => {
-    const { debug } = this.props;
-
     let code = BlocklyJS.workspaceToCode(this.simpleWorkspace.workspace);
     const { commands, blocks, res } = await parsingMovement(code);
     saveLog({ code, type: 'debug', res });
@@ -250,12 +173,10 @@ class Homepage extends React.Component {
     });
 
     if (commands.length === 1) {
-      if (res === 'SUCCESS') {
-        store.dispatch({
-          type: 'CHANGE_CONFIG_MODAL',
-          payload: { congrats: true },
-        });
-      }
+      store.dispatch({
+        type: 'CHANGE_CONFIG_MODAL',
+        payload: { congrats: true, res: res, code: code },
+      });
       store.dispatch({
         type: 'INIT_DEBUG',
         payload: {
@@ -288,12 +209,11 @@ class Homepage extends React.Component {
     });
 
     if (commands.length === idx + 2) {
-      if (res === 'SUCCESS') {
-        store.dispatch({
-          type: 'CHANGE_CONFIG_MODAL',
-          payload: { congrats: true },
-        });
-      }
+      let code = BlocklyJS.workspaceToCode(this.simpleWorkspace.workspace);
+      store.dispatch({
+        type: 'CHANGE_CONFIG_MODAL',
+        payload: { congrats: true, res: res, code: code },
+      });
     } else if (commands.length === idx + 2) {
     }
     store.dispatch({
@@ -304,6 +224,9 @@ class Homepage extends React.Component {
 
   render() {
     const { blocks, debug } = this.props;
+    if (firebase.auth().currentUser === null) {
+      return <Redirect to={'/'} />;
+    }
     return (
       <div className='HomePage'>
         <div className='Game'>

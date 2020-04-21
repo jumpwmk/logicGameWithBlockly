@@ -40,27 +40,30 @@ class App extends React.Component {
   unsubscribeFromAuth = null;
 
   componentDidMount() {
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+    console.log('app did mount');
+    this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
       if (userAuth) {
         const userRef = createUserProfileDocument(userAuth);
 
-        (await userRef).onSnapshot(snapShot => {
+        console.log(userAuth);
+
+        (await userRef).onSnapshot((snapShot) => {
           store.dispatch({
             type: 'SET_CURRENT_USER',
             payload: {
               id: snapShot.id,
-              ...snapShot.data()
-            }
+              ...snapShot.data(),
+            },
           });
+          // console.log('fecthdata');
+          fetchData({ level: snapShot.data().level });
         });
       }
-
       store.dispatch({
         type: 'SET_CURRENT_USER',
-        payload: userAuth
+        payload: userAuth,
       });
     });
-    fetchData();
   }
 
   componentWillUnmount() {
@@ -80,8 +83,8 @@ class App extends React.Component {
   }
 }
 
-const mapStateToProps = ({ user }) => ({
-  currentUser: user.currentUser
-});
+const mapStateToProps = ({ user }) => {
+  return { user };
+};
 
 export default connect(mapStateToProps)(App);

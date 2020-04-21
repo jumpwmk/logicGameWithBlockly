@@ -2,8 +2,6 @@ import { store } from '../redux/store';
 import { MAP_W, MAP_H } from '../config/constants';
 
 export function attemptMove(nxtMove) {
-  console.log(nxtMove);
-
   let direction = store.getState().player.facing;
   const oldPos = store.getState().player.position;
 
@@ -66,22 +64,22 @@ function getNewPosition(direction, nxtMove) {
         case 'xb':
           return {
             nxtDirection: direction,
-            newPos: [oldPos[0] - 1, oldPos[1]]
+            newPos: [oldPos[0] - 1, oldPos[1]],
           };
         case 'yf':
           return {
             nxtDirection: direction,
-            newPos: [oldPos[0], oldPos[1] + 1]
+            newPos: [oldPos[0], oldPos[1] + 1],
           };
         case 'xf':
           return {
             nxtDirection: direction,
-            newPos: [oldPos[0] + 1, oldPos[1]]
+            newPos: [oldPos[0] + 1, oldPos[1]],
           };
         case 'yb':
           return {
             nxtDirection: direction,
-            newPos: [oldPos[0], oldPos[1] - 1]
+            newPos: [oldPos[0], oldPos[1] - 1],
           };
         default:
       }
@@ -95,8 +93,8 @@ function dispatchMove(direction, newPos) {
     type: 'MOVE_PLAYER',
     payload: {
       position: newPos,
-      facing: direction
-    }
+      facing: direction,
+    },
   });
 }
 
@@ -104,15 +102,15 @@ function dispatchMap(floatingobj) {
   store.dispatch({
     type: 'CHANGE_FLOATING_OBJ',
     payload: {
-      floatingobj: floatingobj
-    }
+      floatingobj: floatingobj,
+    },
   });
   let { cntGems } = store.getState().blocks;
   store.dispatch({
     type: 'COLLECT_GEMS',
     payload: {
-      cntGems: cntGems + 1
-    }
+      cntGems: cntGems + 1,
+    },
   });
 }
 
@@ -132,7 +130,7 @@ function observeImpassable(oldPos, direction) {
     NORTH: 1,
     EAST: 2,
     SOUTH: 4,
-    WEST: 8
+    WEST: 8,
   };
 
   return (nowTile & DIRECTION[direction]) === 0;

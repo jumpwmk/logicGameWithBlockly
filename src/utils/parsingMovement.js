@@ -70,8 +70,6 @@ function move(obj) {
     return { res: false, command: 'FAIL_FORWARD', block: id };
   }
 
-  console.log(direction);
-
   let { nx_ii, nx_jj } = DIRECTION[direction];
 
   ii = ii + nx_ii;
@@ -88,8 +86,6 @@ function move(obj) {
 function turn(obj) {
   let { direction, command, id } = obj;
   let COMMANDS = { turnLeft: 'TURN_LEFT', turnRight: 'TURN_RIGHT' };
-
-  console.log(obj);
 
   let DIRECTION_LEFT = {
     xb: 'yb',
@@ -142,11 +138,6 @@ function isOnTile(obj) {
 
   const OVERLAY_TYPE = { 1: 'green', 2: 'black', 3: 'yellow' };
 
-  if (tileoverlay[ii][jj]) {
-    console.log('tileoverlay');
-    console.log(tileoverlay[ii][jj].overlaytype, condition, OVERLAY_TYPE);
-  }
-
   if (tileoverlay[ii][jj] !== null) {
     if (OVERLAY_TYPE[tileoverlay[ii][jj].overlaytype] === condition)
       return {
@@ -194,10 +185,8 @@ function isPath(obj) {
   }
 
   if (tiles[ii][jj] & DIRECTION[direction]) {
-    console.log('look failed!');
     return { command: DIRECTION_LOOK[direction], block: id, res: false };
   } else {
-    console.log('look success!');
     return { command: DIRECTION_LOOK[direction], block: id, res: true };
   }
 }
@@ -215,6 +204,8 @@ function parsingMovement(code) {
   let pos = store.getState().player.position;
   let ii = pos[0];
   let jj = pos[1];
+
+  let tmp_res = 'SUCCESS';
 
   let tmpGemsCoordinate = [];
 
@@ -237,7 +228,6 @@ function parsingMovement(code) {
     if (tiles[ii][jj] & FINAL) {
       break;
     }
-    console.log(line[0], line[1]);
 
     lastBlock = id;
 
@@ -279,14 +269,11 @@ function parsingMovement(code) {
     } else if (condition_id && condition_res === false) {
       continue;
     } else if (line[1] === 'if_tile') {
-      // console.log('if_tile');
-      // console.log(line[1], line[2]);
       const res = isOnTile({
         condition: line[2],
         id: line[0],
         coordinate: { ii: ii, jj: jj },
       });
-      console.log(res);
       if (res.res) {
         condition_id = res.block;
         condition_res = true;
@@ -304,7 +291,6 @@ function parsingMovement(code) {
         coordinate: { ii: ii, jj: jj },
         direction: direction,
       });
-      console.log(res);
       if (res.res) {
         condition_id = res.block;
         condition_res = true;
@@ -330,10 +316,10 @@ function parsingMovement(code) {
         } else {
           commands.push(res.command);
           blocks.push(res.block);
+          tmp_res = 'FAIL_MOVE';
           break;
         }
       } else if (line[1] === 'turnRight' || line[1] === 'turnLeft') {
-        console.log(line[0], line[1]);
         const res = turn({ direction, command: line[1], id: line[0] });
         commands.push(res.command);
         blocks.push(res.block);
@@ -348,6 +334,7 @@ function parsingMovement(code) {
         } else {
           commands.push(res.command);
           blocks.push(res.block);
+          tmp_res = 'FAIL_COLLECT';
           break;
         }
       } else if (line[1] === 'for') {
@@ -374,12 +361,22 @@ function parsingMovement(code) {
   } else if (ticks === 0) {
     commands.push('NULL');
     blocks.push(lastBlock);
-    console.log(commands);
+
     return { commands, blocks, res: 'TIMEOUT' };
+  } else if (tmp_res === 'FAIL_MOVE') {
+    commands.push('NULL');
+    blocks.push(lastBlock);
+
+    return { commands, blocks, res: 'FAIL_MOVE' };
+  } else if (tmp_res === 'FAIL_COLLECT') {
+    commands.push('NULL');
+    blocks.push(lastBlock);
+
+    return { commands, blocks, res: 'FAIL_COLLECT' };
   } else {
     commands.push('NULL');
     blocks.push(lastBlock);
-    console.log(commands);
+
     return { commands, blocks, res: 'FAILURE' };
   }
 }

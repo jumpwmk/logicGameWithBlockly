@@ -1,11 +1,11 @@
 import React from 'react';
 import Modal from 'react-modal';
 import { connect } from 'react-redux';
-import Blockly from 'blockly/core';
 
 import { store } from '../../redux/store';
 import { fetchData } from '../../utils/fetchData';
 import { updateUser } from '../../utils/updateUser';
+import { generateCodeFromCode } from '../../utils/generateCode';
 
 import './congrats.styles.scss';
 
@@ -24,7 +24,6 @@ const customStyles = {
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
     width: '400px',
-    height: '180px',
     'border-radius': '10px',
   },
 };
@@ -58,12 +57,13 @@ class Congrats extends React.Component {
     });
 
     updateUser({ user: user.currentUser });
-
-    await fetchData();
   };
 
   render() {
     const { modals } = this.props;
+
+    let code = generateCodeFromCode(modals.code);
+
     return (
       <Modal
         isOpen={modals.congrats}
@@ -73,12 +73,29 @@ class Congrats extends React.Component {
         contentLabel='Example Modal'
       >
         <div className='header-modal'></div>
-        <h1 className='congrats-text'>เย่~!</h1>
-        <h4 className='next-state'>พร้อมหรือยังกับด่านถัดไป?</h4>
+        {modals.res === 'SUCCESS' ? (
+          <h1 className='congrats-text'>เย่~!</h1>
+        ) : modals.res === 'FAILURE' ? (
+          <h1 className='congrats-text'>FAILURE</h1>
+        ) : modals.res === 'FAIL_MOVE' ? (
+          <h1 className='congrats-text'>FAIL_MOVE</h1>
+        ) : modals.res === 'FAIL_COLLECT' ? (
+          <h1 className='congrats-text'>FAIL_COLLECT</h1>
+        ) : modals.res === 'TIMEOUT' ? (
+          <h1 className='congrats-text'>TIMEOUT</h1>
+        ) : null}
+        <pre className='next-state'>{code}</pre>
+        {modals.res === 'SUCCESS' ? (
+          <h4 className='next-state'>พร้อมหรือยังกับด่านถัดไป?</h4>
+        ) : (
+          <h4 className='next-state'>ลองอีกครั้งนะ</h4>
+        )}
         <div className='btn-pane'>
-          <button className='btn ok' onClick={this.changeMap}>
-            ตกลง
-          </button>
+          {modals.res === 'SUCCESS' ? (
+            <button className='btn ok' onClick={this.changeMap}>
+              ตกลง
+            </button>
+          ) : null}
           <button className='btn cancel' onClick={this.closeModal}>
             ยกเลิก
           </button>

@@ -67,7 +67,7 @@ Blockly.Blocks['for'] = {
 // for inf
 Blockly.Blocks['while_inf'] = {
   init: function () {
-    this.appendDummyInput().appendField('while true');
+    this.appendDummyInput().appendField('วนซ้ำไม่สิ้นสุด');
     this.appendStatementInput('inner_loop').setCheck(null).appendField('ทำ');
     this.setPreviousStatement(true, null);
     this.setColour(120);
