@@ -32,7 +32,10 @@ import '../../components/custom-blocks/generator';
 
 import World from '../../components/world/world.component';
 import { ReactComponent as Play } from '../../images/play.svg';
+import { ReactComponent as Shuffle } from '../../images/shuffle.svg';
 import { ReactComponent as Reset } from '../../images/reset.svg';
+import { ReactComponent as Next } from '../../images/next2.svg';
+import { ReactComponent as Solution } from '../../images/solution.svg';
 
 import firebase from 'firebase/app';
 
@@ -235,34 +238,35 @@ class Homepage extends React.Component {
             <div className='ConvertBtnPane'>
               {debug.status ? (
                 <button className='NextBtn' onClick={this.nextAction}>
-                  <div>NEXT</div>
+                  <div>ต่อไป</div>
                   <Play className='Play' />
                 </button>
               ) : null}
               {blocks.state && !debug.status ? (
                 <button className='RunBtn' onClick={this.generateCode}>
-                  <div>RUN PROGRAM</div>
+                  <div>เริ่มโปรแกรม</div>
                   <Play className='Play' />
                 </button>
               ) : (
                 <button className='CancelBtn' onClick={this.cancelCode}>
-                  <div>RESET</div>
+                  <div>ยกเลิก</div>
                   <Reset className='Reset' />
                 </button>
               )}
               {blocks.state && !debug.status ? (
                 <button className='ChangeMapBtn' onClick={this.changeMap}>
-                  <div>CHANGE MAP</div>
-                </button>
-              ) : null}
-              {blocks.state && !debug.status ? (
-                <button className='ShowSolutionBtn' onClick={this.showSolution}>
-                  <div>SOLUTION</div>
+                  <div>เปลี่ยนด่าน</div>
+                  <Shuffle className='Shuffle' />
                 </button>
               ) : null}
               {blocks.state && !debug.status ? (
                 <button className='DebugBtn' onClick={this.debug}>
                   <div>DEBUG</div>
+                </button>
+              ) : null}
+              {blocks.state && !debug.status ? (
+                <button className='ShowSolutionBtn' onClick={this.showSolution}>
+                  <Solution className='Solution' />
                 </button>
               ) : null}
             </div>
