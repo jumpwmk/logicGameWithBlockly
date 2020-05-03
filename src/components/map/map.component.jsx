@@ -6,7 +6,7 @@ import {
   placeWall,
   placeEndPortal,
   placeFloatingObj,
-  placePlatformTileOverlay
+  placePlatformTileOverlay,
 } from '../../utils/generateMap';
 
 import { MAP_W, MAP_H } from '../../config/constants';
@@ -27,7 +27,8 @@ function MapTile(props) {
         top: tile.top,
         left: tile.left,
         width: tile.width,
-        height: tile.height
+        height: tile.height,
+        zIndex: 4 * (props.index_i * MAP_W + props.index_j) + 2,
       }}
       className={className}
     />
@@ -39,7 +40,7 @@ function MapTileOverlay(props) {
   const { className, ...tile } = placePlatformTileOverlay({
     x: props.index_i,
     y: props.index_j,
-    type: props.tile.overlaytype
+    type: props.tile.overlaytype,
   });
   return (
     <div
@@ -49,7 +50,8 @@ function MapTileOverlay(props) {
         top: tile.top,
         left: tile.left,
         width: tile.width,
-        height: tile.height
+        height: tile.height,
+        zIndex: 4 * (props.index_i * MAP_W + props.index_j) + 2,
       }}
       className={className}
     />
@@ -69,7 +71,8 @@ function MapWall(props) {
             top: wall.top,
             left: wall.left,
             width: wall.width,
-            height: wall.height
+            height: wall.height,
+            zIndex: 4 * (props.index_i * MAP_W + props.index_j) + 3,
           }}
           className='platformwall-yf-1'
         />
@@ -82,7 +85,8 @@ function MapWall(props) {
             top: wall.top,
             left: wall.left,
             width: wall.width,
-            height: wall.height
+            height: wall.height,
+            zIndex: 4 * (props.index_i * MAP_W + props.index_j) + 1,
           }}
           className='platformwall-yb-1'
         />
@@ -95,7 +99,8 @@ function MapWall(props) {
             top: wall.top,
             left: wall.left,
             width: wall.width,
-            height: wall.height
+            height: wall.height,
+            zIndex: 4 * (props.index_i * MAP_W + props.index_j) + 3,
           }}
           className='platformwall-xf-1'
         />
@@ -108,7 +113,8 @@ function MapWall(props) {
             top: wall.top,
             left: wall.left,
             width: wall.width,
-            height: wall.height
+            height: wall.height,
+            zIndex: 4 * (props.index_i * MAP_W + props.index_j) + 1,
           }}
           className='platformwall-xb-1'
         />
@@ -135,7 +141,8 @@ function MapFloatingObj(props) {
         top: obj.top,
         left: obj.left,
         width: obj.width,
-        height: obj.height
+        height: obj.height,
+        zIndex: 4 * (props.index_i * MAP_W + props.index_j) + 2,
       }}
       className={className}
     />
@@ -152,7 +159,8 @@ function MapEndPortal({ x, y }) {
         top: tile.top,
         left: tile.left,
         width: tile.width,
-        height: tile.height
+        height: tile.height,
+        zIndex: 4 * (x * MAP_W + y) + 2,
       }}
       className={className}
     />
@@ -174,11 +182,6 @@ function Map(props) {
           <MapTileOverlay tile={tile} index_i={index_i} index_j={index_j} />
         ))
       )}
-      {map.wall.map((row, index_i) =>
-        row.map((wall, index_j) => (
-          <MapWall wall={wall} index_i={index_i} index_j={index_j} />
-        ))
-      )}
       {map.floatingobj.map((row, index_i) =>
         row.map((obj, index_j) => (
           <MapFloatingObj
@@ -190,6 +193,11 @@ function Map(props) {
         ))
       )}
       {MapEndPortal(map.end)}
+      {map.wall.map((row, index_i) =>
+        row.map((wall, index_j) => (
+          <MapWall wall={wall} index_i={index_i} index_j={index_j} />
+        ))
+      )}
     </div>
   );
 }

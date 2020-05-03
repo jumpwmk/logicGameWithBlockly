@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import handleMovement from '../../utils/movement';
 
 import { placePlayer } from '../../utils/generateMap';
+import { MAP_W, MAP_H } from '../../config/constants';
 
 import './player.styles.scss';
 
@@ -23,7 +24,8 @@ function Player(props) {
         top: tile.top,
         left: tile.left,
         width: tile.width,
-        height: tile.height
+        height: tile.height,
+        zIndex: 4 * (player.position[0] * MAP_W + player.position[1]) + 2,
       }}
       className={className}
     />

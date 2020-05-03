@@ -1,6 +1,6 @@
 export function generateCodeFromObj(obj) {
-  let { commands, indent } = obj;
-  commands = { ...commands };
+  let { indent } = obj;
+  let commands = { ...obj.commands };
   let COMMANDS = [
     'moveForward()\r\n',
     'turnRight()\r\n',
@@ -47,7 +47,8 @@ export function generateCodeFromObj(obj) {
       indent: indent + 1,
     });
   } else if (commands.type === 'if_else' || commands.type === 'nested_if') {
-    let { condition, condition_else } = commands;
+    let { condition, commands_else } = commands;
+    commands = { ...commands };
     commands.type = 'basic';
     for (let i = 0; i < indent; i++) {
       str += '  ';
@@ -57,7 +58,7 @@ export function generateCodeFromObj(obj) {
       commands,
       indent: indent + 1,
     });
-    commands.commands = condition_else;
+    commands.commands = commands_else;
     for (let i = 0; i < indent; i++) {
       str += '  ';
     }
@@ -87,7 +88,7 @@ export function generateCodeFromCode(code) {
         if (line[2] === '1000') {
           str += 'while(true):\r\n';
         } else {
-          str += 'while(true):\r\n';
+          str += 'for(' + line[2] + ' ):\r\n';
         }
       } else if (line[1] === 'if_tile') {
         str += 'if( on ' + line[2] + ' tile):\r\n';
